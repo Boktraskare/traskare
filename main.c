@@ -23,25 +23,35 @@ static void repl() {
 
         // Cut last "\n"
         line[strlen(line) - 1] = '\0';
+
+        //result = run(line);
         printf("%s\n", line);
     }
 }
 
 /*
- * Send the file located at path into the interpreter.
+ * The entrypoint of the interpreter.
  */
-static void run(const char* path) {
-    printf("%s", path);
+static void run(const char* source) {
+    // Not yet implemented, just print the source for now.
+    printf("%s", source);
 }
+
+/*
+ * Read the file specified at path and feed it to run().
+ */
+static void runFile(const char* path) {
+    printf("%s", path);
+} 
 
 int main(int argc, const char* argv[]) {
     if (argc == 1) {
-        printf("Welcome to boktraskare.");
+        printf("Welcome to boktraskare. cmd + d to exit.");
         printf("\n");
         printf("\n");
         repl();
     } else if (argc == 2) {
-        run(argv[2]);
+        runFile(argv[2]);
     } else {
         fprintf(stderr, "Usage: traskare [path]\n");
     }
