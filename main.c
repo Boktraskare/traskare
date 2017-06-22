@@ -5,10 +5,7 @@
 
 #define MAX_LINE_LENGTH 1024
 
-/*
- * A read-eval-print loop for interactive testing of the
- * interpreter.
- */
+// A read-eval-print loop for interactive testing of the interpreter.
 static void repl() {
     char line[MAX_LINE_LENGTH];
 
@@ -29,17 +26,13 @@ static void repl() {
     }
 }
 
-/*
- * The entrypoint of the interpreter.
- */
+// The entrypoint of the interpreter.
 static void run(const char* source) {
     // Not yet implemented, just print the source for now.
     printf("%s", source);
 }
 
-/*
- * Read the file specified at path and feed it to run().
- */
+// Read the file specified at path and feed it to run().
 static void runFile(const char* path) {
     printf("%s", path);
 } 
