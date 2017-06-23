@@ -1,5 +1,13 @@
-# boktraskare
-Tree Walking interpreter
+### Boktraskare
+                                                  
+A tree walking interpreter
 
+#### Roadmap
+##### Scanner
+- [ ] Finish outline for the scanner
 
-tjena kexet, står du här och smular?
+##### Parser
+- [ ] Handle simple expressions such as 1 + 1
+
+##### Evaluation
+- [ ] How does it even work?
