@@ -3,7 +3,18 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "scanner.h"
+
 #define MAX_LINE_LENGTH 1024
+
+// The entrypoint of the interpreter.
+static void run(const char* source) {
+    initScanner(source);
+
+    while (scanToken().type != TOKEN_EOF) {
+        printf("%d", scanToken().length);
+    }
+}
 
 // A read-eval-print loop for interactive testing of the interpreter.
 static void repl() {
@@ -21,15 +32,9 @@ static void repl() {
         // Cut last "\n"
         line[strlen(line) - 1] = '\0';
 
-        //result = run(line);
-        printf("%s\n", line);
+        run(line);
+        printf("\n"); 
     }
-}
-
-// The entrypoint of the interpreter.
-static void run(const char* source) {
-    // Not yet implemented, just print the source for now.
-    printf("%s", source);
 }
 
 // Read the file specified at path and feed it to run().

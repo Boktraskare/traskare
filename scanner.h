@@ -1,9 +1,12 @@
 #ifndef scanner_h
 #define scanner_h
 
+#include <stdbool.h>
+
 typedef enum {
     TOKEN_NUMBER,
     TOKEN_PLUS,
+    TOKEN_EOF,
 } TokenType;
 
 typedef struct {
@@ -13,8 +16,14 @@ typedef struct {
     int         line;
 } Token;
 
+static char peekNext();
+static Token number();
+static bool isAtEnd();
+static char peek();
+static bool isDigit(char c);
+static char advance();
+static Token makeToken(TokenType);
 void initScanner(const char* source);
-
 Token scanToken();
 
 #endif
