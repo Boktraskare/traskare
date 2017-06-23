@@ -45,3 +45,68 @@ void initScanner(const char* source) {
     scanner.current     = source;
     scanner.line        = 1;    
 }
+
+
+// Scan for token and switch into the correct case with the default case being numbers
+static void scanToken(){
+        char c = advance();
+        switch (c) {
+                case '+': makeToken(PLUS); break;
+
+        default:
+                if(isdigit(c)){
+                        number();
+                }
+        }
+}
+
+static Token makeToken(TokenType type) {
+	Token token;
+	token.type = type;
+	token.star = scanner.tokenStart;
+	token.length = (int) (scanner.current - scanner.tokenStart);
+	token.line = scanner.line;
+
+	return token;
+}
+
+// Check if it is a number
+static bool isDigit(char c) {
+	return c >= '0' && c <= '9';
+}
+
+// Advance the scanner to the next character
+static char advance() {
+        scanner.current++;
+        return scanner.current[1];
+}
+
+// Look at the current character
+static char peek() {
+	return *scanner.current;
+}
+
+// Check if the scanner is at the end
+static bool isAtEnd() {
+	return *scanner.current == '\0';
+}
+
+// Check the next character
+static char peekNext() {
+	if(isAtEnd()) return '\0';
+	return scanner.current[1];
+}
+
+// What to do if the character is a number
+static Token number() {
+        while(isDigit(peek())) advance();
+
+        if(peek() == '.' && isDigit(peeknext())) {
+        	advance();
+	
+		while (isDigit(peek())) advance();
+       	}
+	return makeToken(TOKEN_NUMBER);
+}
+
+
