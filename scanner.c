@@ -4,8 +4,8 @@
 
                           SCANNER
 
-This file will be #included by the parser.c file. The parser
-can then initialize the scanner with the source code and call
+This file will be used by the parser.c file. The parser can 
+then initialize the scanner with the source code and call
 scanToken() whenever it's ready to advance to the next token.
 
 This means that the lexer analyses the source for tokens "on

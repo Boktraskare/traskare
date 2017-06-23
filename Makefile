@@ -2,12 +2,17 @@
 
 CFLAGS := -std=c99 -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter
 
-default:
-	@ mkdir -p build
-	@ gcc $(CFLAGS) main.c -o build/main.o
+SOURCES := $(wildcard *.c)
+OBJECTS := $(addprefix build/, $(notdir $(SOURCES:.c=.o)))
+
+build/boktraskare: $(SOURCES)
+	@ mkdir -p build/
+	@ gcc $(CFLAGS) $(SOURCES) -o $@
 
 run:
-	@ build/main.o
+	@ build/boktraskare
 
 clean:
 	rm -rf build
+
+.PHONY: default
