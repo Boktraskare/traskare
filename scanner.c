@@ -21,6 +21,29 @@
 
    ---------------------------------------------------------- */
 
+// For debugging
+static TokenToString tokenToString[] = {
+    {TOKEN_NUMBER, "TOKEN_NUMBER"}, 
+    {TOKEN_PLUS,   "TOKEN_PLUS"}, 
+    {TOKEN_EOF,    "TOKEN_EOF"}, 
+    {TOKEN_ERROR,  "TOKEN_ERROR"}, 
+};
+
+const char* ttos(TokenType type) {
+    TokenToString* table = tokenToString;
+    TokenToString* endOfTable = table + sizeof(tokenToString)/sizeof(tokenToString[0]);
+
+    while (table < endOfTable) {
+        if (table->type == type) {
+            return table->string;
+        }
+
+        table++;
+    }
+
+    return "NO_STRING_REPRESENTATION";
+}
+
 typedef struct {
     // The complete source file we are walking char by char.
     const char* source;
@@ -76,9 +99,12 @@ static bool end() {
 // default case being numbers.
 Token scanToken() {
     skipWhitespace();
-    if (end()) return makeToken(TOKEN_EOF);
-
     scanner.tokenStart = scanner.current;
+
+    if (*scanner.current == '\0') {
+        return makeToken(TOKEN_EOF);
+    }
+
     char c = advance();
 
     switch (c) {

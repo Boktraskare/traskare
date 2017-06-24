@@ -9,7 +9,7 @@ build/boktraskare: $(SOURCES)
 	@ mkdir -p build/
 	@ gcc $(CFLAGS) $(SOURCES) -o $@
 
-run:
+run: build/boktraskare
 	@ build/boktraskare
 
 clean:

@@ -11,10 +11,13 @@
 static void run(const char* source) {
     initScanner(source);
 
-    Token t = scanToken();
-    while (t.type != TOKEN_EOF) {
-        printf("TOKEN: %.*s\n", t.length, t.start);
-        t = scanToken();
+    while (true) {
+        Token t = scanToken();
+        printf("TOKENTYPE: %s, LEXEME: %.*s\n", ttos(t.type), t.length, t.start);
+
+        if (t.type == TOKEN_EOF) {
+            break;
+        }
     }
 }
 
