@@ -11,8 +11,10 @@
 static void run(const char* source) {
     initScanner(source);
 
-    while (scanToken().type != TOKEN_EOF) {
-        printf("%d", scanToken().length);
+    Token t = scanToken();
+    while (t.type != TOKEN_EOF) {
+        printf("TOKEN: %.*s\n", t.length, t.start);
+        t = scanToken();
     }
 }
 

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "scanner.h"
 #include <string.h>
 
@@ -47,9 +48,37 @@ void initScanner(const char* source) {
     scanner.line        = 1;    
 }
 
+static void skipWhitespace() {
+    while (true) {
+        switch(peek()) {
+            case ' ':
+            case '\r':
+            case '\t':
+                advance();
+                break;
+
+            case '\n':
+                scanner.line++;
+                advance();
+                break;
+
+            default:
+                return;
+        }
+    }
+}
+
+static bool end() {
+    return *scanner.current == '\0';
+}
+
 // Scan for token and switch into the correct case with the 
 // default case being numbers.
 Token scanToken() {
+    skipWhitespace();
+    if (end()) return makeToken(TOKEN_EOF);
+
+    scanner.tokenStart = scanner.current;
     char c = advance();
 
     switch (c) {
@@ -61,7 +90,7 @@ Token scanToken() {
                   }
     }
 
-    return makeToken(TOKEN_EOF);
+    return makeToken(TOKEN_ERROR);
 }
 
 static Token makeToken(TokenType type) {
@@ -90,25 +119,8 @@ static char peek() {
     return *scanner.current;
 }
 
-// Check if the scanner is at the end
-static bool isAtEnd() {
-    return *scanner.current == '\0';
-}
-
-// Check the next character
-static char peekNext() {
-    if(isAtEnd()) return '\0';
-    return scanner.current[1];
-}
-
 // What to do if the character is a number
 static Token number() {
     while (isDigit(peek())) advance();
-
-    if(peek() == '.' && isDigit(peekNext())) {
-        advance();
-        while (isDigit(peek())) advance();
-    }
-
     return makeToken(TOKEN_NUMBER);
 }

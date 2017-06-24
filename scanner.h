@@ -7,6 +7,7 @@ typedef enum {
     TOKEN_NUMBER,
     TOKEN_PLUS,
     TOKEN_EOF,
+    TOKEN_ERROR,
 } TokenType;
 
 typedef struct {
@@ -16,6 +17,8 @@ typedef struct {
     int         line;
 } Token;
 
+static bool end();
+static void skipWhitespace();
 static char peekNext();
 static Token number();
 static bool isAtEnd();
