@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "scanner.h"
+#include "token.h"
 
 #define MAX_LINE_LENGTH 1024
 
@@ -13,7 +14,7 @@ static void run(const char* source) {
 
     while (true) {
         Token t = scanToken();
-        printf("TOKENTYPE: %s, LEXEME: %.*s\n", ttos(t.type), t.length, t.start);
+        printf("%-15s %.*s\n", ttos(t.type), t.length, t.start);
 
         if (t.type == TOKEN_EOF) {
             break;

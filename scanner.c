@@ -1,6 +1,8 @@
 #include <stdio.h>
-#include "scanner.h"
 #include <string.h>
+
+#include "scanner.h"
+#include "token.h"
 
 /* ----------------------------------------------------------
 
@@ -21,28 +23,20 @@
 
    ---------------------------------------------------------- */
 
-// For debugging
-static TokenToString tokenToString[] = {
-    {TOKEN_NUMBER, "TOKEN_NUMBER"}, 
-    {TOKEN_PLUS,   "TOKEN_PLUS"}, 
-    {TOKEN_EOF,    "TOKEN_EOF"}, 
-    {TOKEN_ERROR,  "TOKEN_ERROR"}, 
-};
-
-const char* ttos(TokenType type) {
-    TokenToString* table = tokenToString;
-    TokenToString* endOfTable = table + sizeof(tokenToString)/sizeof(tokenToString[0]);
-
-    while (table < endOfTable) {
-        if (table->type == type) {
-            return table->string;
-        }
-
-        table++;
-    }
-
-    return "NO_STRING_REPRESENTATION";
-}
+// Function prototypes. These are static which means they won't
+// be visible outside this compilation unit, which also means we
+// don't declare them in the header. Functions which are supposed
+// to be called from elsewhere, such as scanToken(), are declared 
+// in a header file to be included by external .c files.
+static bool end();
+static void skipWhitespace();
+static char peekNext();
+static Token number();
+static bool isAtEnd();
+static char peek();
+static bool isDigit(char c);
+static char advance();
+static Token makeToken(TokenType);
 
 typedef struct {
     // The complete source file we are walking char by char.
@@ -52,7 +46,7 @@ typedef struct {
     // for the parser. When we reach the end of the token we are
     // certain that the current lexeme to make into a token is in
     // the span och lexemeStart and current.
-    const char* tokenStart;
+    const char* lexemeStart;
     const char* current;
 
     // The line count needs to be maintained throughout scanning,
@@ -61,14 +55,42 @@ typedef struct {
     int line;
 } Scanner;
 
-// Global scanner object.
-Scanner scanner;
+// The scanner struct this file will operate on.
+static Scanner scanner;
 
+// This is called from external source files before they begin 
+// calling scanToken(). Think of it like a constructor.
 void initScanner(const char* source) {
     scanner.source      = source;
-    scanner.tokenStart  = source;
+    scanner.lexemeStart  = source;
     scanner.current     = source;
     scanner.line        = 1;    
+}
+
+// This is the only interface (other than initScanner) that the
+// use code will ever call. All the lexing stuff is completely
+// transparent to the caller of scanToken().
+Token scanToken() {
+    skipWhitespace();
+
+    scanner.lexemeStart = scanner.current;
+
+    if (*scanner.current == '\0') {
+        return makeToken(TOKEN_EOF);
+    }
+
+    char c = advance();
+
+    switch (c) {
+        case '+': return makeToken(TOKEN_PLUS); break;
+
+        default:
+                  if(isDigit(c)) {
+                      return number();
+                  }
+    }
+
+    return makeToken(TOKEN_ERROR);
 }
 
 static void skipWhitespace() {
@@ -95,40 +117,6 @@ static bool end() {
     return *scanner.current == '\0';
 }
 
-// Scan for token and switch into the correct case with the 
-// default case being numbers.
-Token scanToken() {
-    skipWhitespace();
-    scanner.tokenStart = scanner.current;
-
-    if (*scanner.current == '\0') {
-        return makeToken(TOKEN_EOF);
-    }
-
-    char c = advance();
-
-    switch (c) {
-        case '+': return makeToken(TOKEN_PLUS); break;
-
-        default:
-                  if(isDigit(c)) {
-                      return number();
-                  }
-    }
-
-    return makeToken(TOKEN_ERROR);
-}
-
-static Token makeToken(TokenType type) {
-    Token token;
-    token.type = type;
-    token.start = scanner.tokenStart;
-    token.length = (int) (scanner.current - scanner.tokenStart);
-    token.line = scanner.line;
-
-    return token;
-}
-
 // Check if it is a number
 static bool isDigit(char c) {
     return c >= '0' && c <= '9';
@@ -149,4 +137,14 @@ static char peek() {
 static Token number() {
     while (isDigit(peek())) advance();
     return makeToken(TOKEN_NUMBER);
+}
+
+static Token makeToken(TokenType type) {
+    Token token;
+    token.type = type;
+    token.start = scanner.lexemeStart;
+    token.length = (int) (scanner.current - scanner.lexemeStart);
+    token.line = scanner.line;
+
+    return token;
 }

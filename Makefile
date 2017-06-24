@@ -9,10 +9,12 @@ build/boktraskare: $(SOURCES)
 	@ mkdir -p build/
 	@ gcc $(CFLAGS) $(SOURCES) -o $@
 
-run: build/boktraskare
+run:
 	@ build/boktraskare
 
 clean:
 	rm -rf build
+
+cnr: clean build/boktraskare run
 
 .PHONY: default
