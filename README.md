@@ -5,11 +5,13 @@ A tree walking interpreter
 #### Roadmap
 ##### Scanner
 
-- [x] Finish outline for the scanner (mathematical expressions)
+- [ ] Finish outline for the scanner
 
 The outline of the scanner should demonstrate how to identify lexemes in the source.
 For starters, simple mathematical expressions should be enough to move on to the parser. 
-After having a functional scanner
+After having a functional scanner, parser and evaluator for mathematical expressions, we
+can move on to handling identifiers, statements and everything that makes a programming
+language.
 
 - [ ] Define a grammar in [EBNF](https://www.wikiwand.com/en/Extended_Backus%E2%80%93Naur_form)
 
@@ -41,8 +43,6 @@ on how this will be implemented.
 ##### Parser
 - [ ] Finish skeleton of the parser
 - [ ] Implement every EBNF production as a function to produce a tree
-
-
 
 ##### Evaluation
 - [ ] Do more research on how evaluation works
