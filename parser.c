@@ -5,8 +5,15 @@
    
 
    ---------------------------------------------------------- */
- 
 
+//The parser...
+
+//As it is now the parser is supposed to handle simple + or - expressions but the skeleton for adding more expressions is written.
+
+
+ 
+// Define the structure for the Parser
+// Should it be like this or a list?
 typedef struct {
 	
 	Token current;
@@ -14,6 +21,7 @@ typedef struct {
 
 } Parser
 
+// Parse
 static Expr parse(){
 	return expression();
 
@@ -51,6 +59,7 @@ static Expr comparison(){
 	return expr;
 }
 
+//What to do at term level
 static Expr term(){
 	Expr expr = factor();
 	
@@ -73,11 +82,15 @@ static Expr unary(){
 
 static Expr call(){
 	Expr expr = primary();
+
 	return expr;
 }
 
+//What to do at the primary level for number and strings
 static Expr primary(){
-	
+	if(match(NUMBER, STRING)) {
+        return new Expr.Literal(previous().literal);
+        }
 }
 
 static bool match(TokenType... types){
@@ -91,29 +104,30 @@ static bool match(TokenType... types){
 	return false;
 }
 
+//Check which type of token
 static bool check(Tokentype type){
 	if(end()) return false;
 	return peek().type == type;
 }
 
+//Advance the parser
 static Token advance(){
 	if(!end()) current++;
 	return previous();
 }
 
+//Check if the parser is at the end
 static bool end(){
 	return peek().type == EOF;
 }
 
+//Return on which token the parser currently are
 static Token peek(){
 	return parser.current;
 }
 
+//Return the previous token
 static Token previous(){
 	return parser.previous;
 }
 
-
-
-
-}
