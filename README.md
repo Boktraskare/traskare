@@ -41,7 +41,8 @@ everything as a float, so a 1 is actually a 1.0, for simplicity. Need to do more
 on how this will be implemented.
 
 ##### Parser
-- [ ] Finish skeleton of the parser
+- [ ] Figure out skeleton of the parser
+- [ ] Implement the recusrive descent parser
 - [ ] Implement every EBNF production as a function to produce a tree
 
 ##### Evaluation
