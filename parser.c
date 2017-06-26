@@ -1,17 +1,31 @@
+#include "scanner.h"
+#include "token.h"
+
 /* ----------------------------------------------------------
 
    PARSER COMPILER
 
-   
+   This is a recursive descent parser, starting with the top
+   rule in the grammar, reading a sentence of tokens from left
+   to right while doing leftmost derivation. This means that we
+   always choose the leftmost non-terminal to apply a production
+   rule to. This means that in the following expression
+
+                            1 + 1
+  
+   we will recognize the "binary expression" production before
+   expanding said production (left to right) into its operands.
+   Note that at the outset, the current state of the parser is
+   at some root node in the AST sometimes called just "program".
+   No matter what the next token actually is we will create a
+   node for the production rule which is just under the root
+   rule, which probably will be "binary expression", after that
+   we'll check for the operands, which will be terminals.
+
+   TODO: Create outline for a parser to handle 1 + 1
 
    ---------------------------------------------------------- */
 
-//The parser...
-
-//As it is now the parser is supposed to handle simple + or - expressions but the skeleton for adding more expressions is written.
-
-
- 
 // Define the structure for the Parser
 // Should it be like this or a list?
 typedef struct {
