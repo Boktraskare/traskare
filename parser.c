@@ -1,147 +1,137 @@
-#include "scanner.h"
-#include "token.h"
-
 /* ----------------------------------------------------------
 
-   PARSER COMPILER
+   RECURSIVE DESCENT PARSER
 
-   This is a recursive descent parser, starting with the top
-   rule in the grammar, reading a sentence of tokens from left
-   to right while doing leftmost derivation. This means that we
-   always choose the leftmost non-terminal to apply a production
-   rule to. This means that in the following expression
-
-                            1 + 1
-  
-   we will recognize the "binary expression" production before
-   expanding said production (left to right) into its operands.
-   Note that at the outset, the current state of the parser is
-   at some root node in the AST sometimes called just "program".
-   No matter what the next token actually is we will create a
-   node for the production rule which is just under the root
-   rule, which probably will be "binary expression", after that
-   we'll check for the operands, which will be terminals.
-
-   TODO: Create outline for a parser to handle 1 + 1
+   The input to the parser is the stream of tokens which the
+   parser will consume at will, a token at a time. The output
+   is the abstract syntax tree (AST).
 
    ---------------------------------------------------------- */
 
-// Define the structure for the Parser
-// Should it be like this or a list?
+#include <stdbool.h>
+
+#include "scanner.h"
+#include "token.h"
+#include "ast.h"
+
 typedef struct {
-	
 	Token current;
 	Token previous;
+    Node* ast;
+} Parser;
 
-} Parser
+Parser* parser;
 
-// Parse
-static Expr parse(){
-	return expression();
+Node* parse() {
+    parser = malloc(sizeof(Parser));
 
-}
+    if (!parser) {
+        return 1
+    }
 
-
-static Expr expression() {
-	return assignment(); 
-}
-
-static Expr assignment(){
-	Expr expr = or();
-	return or();
-}
-
-static Expr or(){
-	Expr expr = and();
-	return and();
+    return expression();
 
 }
 
-static Expr and(){
-	Expr expr = equality();
-	return expr;
+static Node* expression() {
+	return term(); 
 }
 
-static Expr equality() {
-	Expr expr = comparison();
-	return expr;
-}
-
-
-static Expr comparison(){
-	Expr expr = term();
-	return expr;
-}
-
-//What to do at term level
-static Expr term(){
-	Expr expr = factor();
+// term -> factor (("-" | "+") factor)*
+// 
+// The evolution of the AST visualized. Note that leftChild and
+// rightChild might extend a complete tree themselves, but we
+// connect both of them with a completely new and unconnected
+// operator node
+//
+// 1.              (ast)
+//
+// 2.           (leftChild)
+//
+// 3.       (leftChild) (parent)
+//
+// 4.(leftChild) (parent) (rightChild)
+//
+// 5.            (parent)
+//              /        \
+//   (leftChild)          (rightChild)
+//
+// 5.            (ast)
+//              /     \
+//   (leftChild)       (rightChild)
+//
+static Node* term() {
+    // 1.
+    // From the current token. Parse the following tokens as
+    // being part of
+	Node* ast = factor();
 	
-	while (match(MINUS, PLUS)){
-	Token operator = previous;
-	Expr right = factor();
-	expr = new Expr.Binary(expr, operator, right);
-	}
-	return expr;
-}
+	while (match(TOKEN_PLUS) || match(TOKEN_MINUS)) {
+        advance();
 
-static Expr factor(){
-	Expr expr = unary();
-	return expr;
-}
+        // 2.
+        // If we get here, we know that the node we parsed above
+        // is the left child of an Operator node in the AST. For
+        // clarity we now rename that node to indicate this
+        // change in perspective.
+        Node* leftChild = ast;
 
-static Expr unary(){
-	return call();
-}
-
-static Expr call(){
-	Expr expr = primary();
-
-	return expr;
-}
-
-//What to do at the primary level for number and strings
-static Expr primary(){
-	if(match(NUMBER, STRING)) {
-        return new Expr.Literal(previous().literal);
+        // 3.
+        // Now comes the work of constructing the operator node.
+        // Note that this is a completely fresh and unconnected
+        // node.
+        Value* op;
+        switch (parser->current) {
+            case TOKEN_PLUS:
+                op = consOp(OP_ADD);
+                break;
+            case TOKEN_MINUS:
+                op = consOp(OP_SUB);
+                break;
+            default:
+                error();
         }
-}
+        Node* parent = malloc(sizeof(Node));
 
-static bool match(TokenType... types){
-	for (TokenType type : types){
-		if(check(type)){
-		advance();
-		return true;
-		}
-	
+        // 4.
+        // Now we continue on parsing the tokens after the PLUS
+        // or MINUS token, knowing that it's a right child of
+        // the previously created operator token.
+        Node* rightChild = factor();
+
+
+        // 5.
+        // Tie it all together and make this new operator node
+        // the 
+        parent->lc = leftChild;
+        parent->value = op;
+        parent->rc = rightChild;
+
+        // 6. The parent is the new "top node".
+        ast = parent;
 	}
-	return false;
+
+	return ast;
 }
 
-//Check which type of token
-static bool check(Tokentype type){
-	if(end()) return false;
-	return peek().type == type;
+static Node* factor() {
+
 }
 
-//Advance the parser
-static Token advance(){
-	if(!end()) current++;
-	return previous();
+static Node* primary() {
+
 }
 
-//Check if the parser is at the end
-static bool end(){
-	return peek().type == EOF;
+static bool match(TokenType t) {
+    return parser->current.type == t;
 }
 
-//Return on which token the parser currently are
-static Token peek(){
-	return parser.current;
+static void advance() {
+    parser->previous = parser->current;
+    parser->current = scanToken();
 }
 
-//Return the previous token
-static Token previous(){
-	return parser.previous;
+// TODO: How to handle errors?
+static void error() {
+    exit(1);
 }
-

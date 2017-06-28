@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "scanner.h"
 #include "token.h"
@@ -20,6 +21,8 @@
    to call scanToken() on, which has the same effect. this saves
    us from having to buffer a list of tokens between the scanner
    and the parser.
+
+   TODO: Implement "-", "*" and "/".
 
    ---------------------------------------------------------- */
 

@@ -1,8 +1,6 @@
 #ifndef token_h
 #define token_h
 
-#include <stdbool.h>
-
 /* ----------------------------------------------------------
 
    TOKEN HEADER
@@ -18,6 +16,9 @@
 typedef enum {
     TOKEN_NUMBER,
     TOKEN_PLUS,
+    TOKEN_MINUS,
+    TOKEN_MUL,
+    TOKEN_DIV,
     TOKEN_EOF,
     TOKEN_ERROR,
 } TokenType;
