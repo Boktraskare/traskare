@@ -15,8 +15,8 @@
 #include "ast.h"
 
 typedef struct {
-	Token current;
-	Token previous;
+    Token current;
+    Token previous;
     Node* ast;
 } Parser;
 
@@ -34,7 +34,7 @@ Node* parse() {
 }
 
 static Node* expression() {
-	return term(); 
+    return term(); 
 }
 
 // term -> factor (("-" | "+") factor)*
@@ -62,11 +62,9 @@ static Node* expression() {
 //
 static Node* term() {
     // 1.
-    // From the current token. Parse the following tokens as
-    // being part of
-	Node* ast = factor();
-	
-	while (match(TOKEN_PLUS) || match(TOKEN_MINUS)) {
+    Node* ast = factor();
+
+    while (match(TOKEN_PLUS) || match(TOKEN_MINUS)) {
         advance();
 
         // 2.
@@ -109,9 +107,9 @@ static Node* term() {
 
         // 6. The parent is the new "top node".
         ast = parent;
-	}
+    }
 
-	return ast;
+    return ast;
 }
 
 static Node* factor() {
