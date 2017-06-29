@@ -39,6 +39,7 @@ Node* parse() {
         error();
     }
 
+    // Go into recursive descent and return the result.
     return expression();
 
 }
