@@ -43,6 +43,7 @@ typedef struct {
     const char* string;
 } TokenToString;
 
+// Just a a helper method to return the token type as a string.
 const char* ttos(TokenType type);
 
 #endif
