@@ -110,7 +110,7 @@ static Node* term() {
 
         // 5.
         // Tie it all together and make this new operator node
-        // the 
+        // the new current AST top node.
         parent->lc = leftChild;
         parent->value = op;
         parent->rc = rightChild;
