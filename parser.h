@@ -6,5 +6,8 @@
 
    ---------------------------------------------------------- */
 
+#include "scanner.h"
+#include "ast.h"
 
-
+void initParser();
+Node* parse();

@@ -5,27 +5,24 @@
 
 #include "scanner.h"
 #include "token.h"
+#include "parser.h"
+#include "ast.h"
 
 #define MAX_LINE_LENGTH 1024
 
-// The entrypoint of the interpreter.
+// The entrypoint of the interpreter. Note that the scanner and
+// and parser are global objects.
 static void run(const char* source) {
     initScanner(source);
-
-    while (true) {
-        Token t = scanToken();
-        printf("%-15s %.*s\n", ttos(t.type), t.length, t.start);
-
-        if (t.type == TOKEN_EOF) {
-            break;
-        }
-    }
+    initParser();
+    Node* ast = parse();
+    prettyPrintAst(ast);
 }
 
 // A read-eval-print loop for interactive testing of the interpreter.
 static void repl() {
     char line[MAX_LINE_LENGTH];
-
+    
     while (true) {
         printf("trask > "); 
 

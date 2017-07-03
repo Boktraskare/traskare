@@ -1,6 +1,6 @@
-/* ----------------------------------------------------------
+g/* ----------------------------------------------------------
 
-   ABSTRACT SYNTAX TREE
+   Abstract SYNTAX TREE
 
    This file contains everything related to the construction
    of AST nodes. The nodes are allocated on the heap. The caller

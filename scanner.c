@@ -65,7 +65,7 @@ static Scanner scanner;
 // calling scanToken(). Think of it like a constructor.
 void initScanner(const char* source) {
     scanner.source      = source;
-    scanner.lexemeStart  = source;
+    scanner.lexemeStart = source;
     scanner.current     = source;
     scanner.line        = 1;    
 }

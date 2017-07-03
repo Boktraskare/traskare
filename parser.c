@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include "scanner.h"
+
 #include "token.h"
 #include "ast.h"
 
@@ -28,20 +29,26 @@ typedef struct {
     Node* ast;
 } Parser;
 
+static Node* primary();
+static Node* expression();
+static Node* term();
+
 static Parser* parser;
+
+void initParser() {
+    parser->current  = scanToken();
+    parser->previous = parser->current;
+}
 
 // This function kicks of the whole recursive descent. It's the
 // only function the use code has to call.
 Node* parse() {
-    parser = malloc(sizeof(Parser));
-
     if (!parser) {
         error();
     }
 
     // Go into recursive descent and return the result.
     return expression();
-
 }
 
 static Node* expression() {
@@ -64,17 +71,17 @@ static Node* expression() {
    4.(leftChild) (parent) (rightChild)
   
    5.            (parent)
-                /        \
-     (leftChild)          (rightChild)
+   /        \
+   (leftChild)          (rightChild)
   
    5.            (ast)
-                /     \
-     (leftChild)       (rightChild)
+   /     \
+   (leftChild)       (rightChild)
 */  
 static Node* term() {
     // 1.
     Node* ast = factor();
-
+    
     while (match(TOKEN_PLUS) || match(TOKEN_MINUS)) {
         advance();
 
@@ -90,15 +97,15 @@ static Node* term() {
         // Note that this is a completely fresh and unconnected
         // node.
         Value* op;
-        switch (parser->current.type) {
-            case TOKEN_PLUS:
-                op = consOp(OP_ADD);
-                break;
-            case TOKEN_MINUS:
-                op = consOp(OP_SUB);
-                break;
-            default:
-                error();
+        switch (parser->previous.type) {
+        case TOKEN_PLUS:
+            op = consOp(OP_ADD);
+            break;
+        case TOKEN_MINUS:
+            op = consOp(OP_SUB);
+            break;
+        default:
+            error();
         }
         Node* parent = malloc(sizeof(Node));
 
@@ -123,7 +130,40 @@ static Node* term() {
 }
 
 static Node* factor() {
-    return NULL;
+    Node* ast = primary();
+
+    while (match(TOKEN_MUL) || match(TOKEN_DIV)) {
+        advance();
+
+        Value* op;
+        switch (parser->previous.type) {
+        case TOKEN_MUL:
+            op = consOp(OP_MUL);
+            break;
+        case TOKEN_DIV:
+            op = consOp(OP_DIV);
+            break;
+        default:
+            error();
+        }
+        Node* parent = malloc(sizeof(Node));
+        
+        Node* rightChild = primary();
+
+        parent->lc = ast;
+        parent->value = op;
+        parent->rc = rightChild;
+
+        ast = parent;
+    }
+
+    return ast;
+}
+
+static Node* primary() {
+    Node* prim = malloc(sizeof(Node));
+    prim->value = consNum(10);
+    return prim;
 }
 
 static bool match(TokenType t) {
