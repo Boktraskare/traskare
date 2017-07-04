@@ -118,8 +118,8 @@ static Node* term() {
         // 5.
         // Tie it all together and make this new operator node
         // the new current AST top node.
-        parent->lc = leftChild;
         parent->value = op;
+        parent->lc = leftChild;
         parent->rc = rightChild;
 
         // 6. The parent is the new "top node".
@@ -150,8 +150,8 @@ static Node* factor() {
         
         Node* rightChild = primary();
 
-        parent->lc = ast;
         parent->value = op;
+        parent->lc = ast;
         parent->rc = rightChild;
 
         ast = parent;
@@ -163,7 +163,9 @@ static Node* factor() {
 static Node* primary() {
     if (match(TOKEN_NUMBER)) {
         Node* prim = malloc(sizeof(Node));
-        prim->value = consNum(10);
+        prim->value = consNum(10); // TODO: Extract value from token.
+        prim->lc = NULL;
+        prim->rc = NULL;
         return prim;
     }
    
