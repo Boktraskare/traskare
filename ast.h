@@ -46,6 +46,6 @@ typedef struct Node {
 
 Value* consOp(Operator);
 Value* consNum(long long);
-void prettyPrintAst(Node*);
+void printAst(Node*);
 
 #endif

@@ -168,9 +168,10 @@ static Node* primary() {
         prim->rc = NULL;
         return prim;
     }
-   
+
    // Last stop.
    error();
+   return false; // very temporary fix
 }
 
 // Match and Advance

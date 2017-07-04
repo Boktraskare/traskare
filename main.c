@@ -15,8 +15,8 @@
 static void run(const char* source) {
     initScanner(source);
     initParser();
-    Node* ast = parse();
-    prettyPrintAst(ast);
+    //Node* ast = parse();
+    //printAst(ast);
 }
 
 // A read-eval-print loop for interactive testing of the interpreter.
