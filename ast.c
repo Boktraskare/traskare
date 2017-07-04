@@ -66,8 +66,6 @@ void printOp(Operator);
      2   3
 
 */
-// Print the AST. This is used for debugging only.
-// TODO: Put the string representation of the Value straight into struct?
 void printAst(Node* ast) {
     printValue(ast);
 
@@ -78,10 +76,6 @@ void printAst(Node* ast) {
     if (ast->rc != NULL) {
         printAst(ast);
     }
-}
-
-void printExpr(Node* ast) {
-    printAst(ast);
 }
 
 void printValue(Node* ast) {
