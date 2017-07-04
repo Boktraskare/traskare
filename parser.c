@@ -161,9 +161,24 @@ static Node* factor() {
 }
 
 static Node* primary() {
-    Node* prim = malloc(sizeof(Node));
-    prim->value = consNum(10);
-    return prim;
+    if (match(TOKEN_NUMBER)) {
+        Node* prim = malloc(sizeof(Node));
+        prim->value = consNum(10);
+        return prim;
+    }
+   
+   // Last stop.
+   error();
+}
+
+// Match and Advance
+static bool maa(TokenType t) {
+    if (match(t)) {
+        advance();
+        return true;
+    }
+   
+   return false;
 }
 
 static bool match(TokenType t) {
