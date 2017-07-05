@@ -27,6 +27,10 @@ Node* consNode(Node* lc, Value* v, Node* rc) {
     n->rc    = rc;
 }
 
+// The parser works on a stream of tokens, and a token is nothing more
+// than a TokenType and a string lexeme. We must convert these values
+// to the types of the implementation language (C in this case). This
+// is where our source code turns into C.
 Value* tokenToValue(Token t) {
     switch(t.type) {
        case TOKEN_NUMBER: return consNumVal(strtoll(t.start, NULL, 10)) break;
