@@ -2,14 +2,9 @@
 
    ABSTRACT SYNTAX TREE
 
-   This file contains everything related to the construction
-   of AST nodes. The nodes are allocated on the heap. The caller
-   will have to do the job of constructing a tree out of the
-   nodes returned.
-
-   TODO: Implement function to print the tree, showing nesting
-         with parenthesis.
-
+   This file contains everything related to the construction of
+   AST nodes and their value.
+   
    ---------------------------------------------------------- */
 
 #include <stdlib.h>
@@ -21,12 +16,10 @@
 static void printValue(Node*);
 static void printExpr(Node*);
 static void printOp(Operator);
+Value* consOpVal(Operator op)
+Value* consNumVal(long long val)
 
-
-// Allocate memory for and construct a Value with the specified
-// operator. Return a pointer to this constructed Value on the
-// heap. This will later become part of a Node.
-Value* consOp(Operator op) {
+Value* consOpVal(Operator op) {
     Value* v = malloc(sizeof(Value));
 
     if (!v) {
@@ -39,12 +32,7 @@ Value* consOp(Operator op) {
     return v;
 }
 
-// Allocate memory for and construct a Value with the specified
-// number value. Return a pointer to this constructed Value on 
-// the heap. This will later become part of a Node. Note that
-// having long long here means that a number is internally
-// represented by a long long.
-Value* consNum(long long val) {
+Value* consNumVal(long long val) {
     Value* v = malloc(sizeof(Value));
 
     if (!v) {
@@ -57,17 +45,30 @@ Value* consNum(long long val) {
     return v;
 }
 
-/*
-   Give this function an ast, and it will print it in prefix notation.
-   A tree such as the one below will be printed in pre order as 
-   (+ 1 (* 2 3)).
+Node* consNode(Node* lc, Value* v, Node* rc) {
+    Node* n = malloc(sizeof(Node));
+   
+    n->value = v;
+    n->lc    = lc;
+    n->rc    = rc;
+}
+
+/* ----------------------------------------------------------
+
+   Everything that follows is related to the printing of the 
+   ast. Might be better to move this to another file.
+
+   Give this function an ast, and it will print it in prefix 
+   notation. A tree such as the one below will be printed in 
+   pre order as (+ 1 (* 2 3)).
 
        +
     1     *
         2   3
      
    TODO: Make sure it works.
-*/
+
+   ---------------------------------------------------------- */
 void printAst(Node* ast) {
     printValue(ast);
 
