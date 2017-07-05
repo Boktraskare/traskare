@@ -29,11 +29,11 @@ Node* consNode(Node* lc, Value* v, Node* rc) {
 
 Value* tokenToValue(Token t) {
     switch(t.type) {
-       case TOKEN_NUMBER: consNumVal(strtoll(t.start, NULL, 10)) break;
-       case TOKEN_PLUS:   consOpVal(OP_ADD) break;
-       case TOKEN_MINUS:  consOpVal(OP_SUB) break;
-       case TOKEN_MUL:    consOpVal(OP_MUL) break;
-       case TOKEN_DIV:    consOpVal(OP_DIV) break;
+       case TOKEN_NUMBER: return consNumVal(strtoll(t.start, NULL, 10)) break;
+       case TOKEN_PLUS:   return consOpVal(OP_ADD) break;
+       case TOKEN_MINUS:  return consOpVal(OP_SUB) break;
+       case TOKEN_MUL:    return consOpVal(OP_MUL) break;
+       case TOKEN_DIV:    return consOpVal(OP_DIV) break;
     }
 }
 
