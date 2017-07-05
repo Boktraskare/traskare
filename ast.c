@@ -58,14 +58,15 @@ Value* consNum(long long val) {
 }
 
 /*
-Give this function an ast, and it will print it in prefix notation.
-A tree such as the one below will be printed in order as (+ 1 (* 2 3)).
+   Give this function an ast, and it will print it in prefix notation.
+   A tree such as the one below will be printed in pre order as 
+   (+ 1 (* 2 3)).
 
-    +
- 1     *
-     2   3
+       +
+    1     *
+        2   3
      
-TODO: Make sure it works.
+   TODO: Make sure it works.
 */
 void printAst(Node* ast) {
     printValue(ast);
