@@ -16,10 +16,28 @@
 static void printValue(Node*);
 static void printExpr(Node*);
 static void printOp(Operator);
-Value* consOpVal(Operator op)
-Value* consNumVal(long long val)
+static Value* consOpVal(Operator op)
+static Value* consNumVal(long long val)
 
-Value* consOpVal(Operator op) {
+Node* consNode(Node* lc, Value* v, Node* rc) {
+    Node* n = malloc(sizeof(Node));
+   
+    n->value = v;
+    n->lc    = lc;
+    n->rc    = rc;
+}
+
+Value* tokenToValue(Token t) {
+    switch(t.type) {
+       case TOKEN_NUMBER: consNumVal(strtoll(t.start, NULL, 10)) break;
+       case TOKEN_PLUS:   consOpVal(OP_ADD) break;
+       case TOKEN_MINUS:  consOpVal(OP_SUB) break;
+       case TOKEN_MUL:    consOpVal(OP_MUL) break;
+       case TOKEN_DIV:    consOpVal(OP_DIV) break;
+    }
+}
+
+static Value* consOpVal(Operator op) {
     Value* v = malloc(sizeof(Value));
 
     if (!v) {
@@ -32,7 +50,7 @@ Value* consOpVal(Operator op) {
     return v;
 }
 
-Value* consNumVal(long long val) {
+static Value* consNumVal(long long val) {
     Value* v = malloc(sizeof(Value));
 
     if (!v) {
@@ -45,13 +63,6 @@ Value* consNumVal(long long val) {
     return v;
 }
 
-Node* consNode(Node* lc, Value* v, Node* rc) {
-    Node* n = malloc(sizeof(Node));
-   
-    n->value = v;
-    n->lc    = lc;
-    n->rc    = rc;
-}
 
 /* ----------------------------------------------------------
 
