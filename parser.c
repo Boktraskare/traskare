@@ -55,7 +55,9 @@ static Node* expression() {
     return term(); 
 }
 
-/* term -> factor (("-" | "+") factor)*
+/* 
+
+   term -> factor (("-" | "+") factor)*
  
    The evolution of the AST visualized. Note that leftChild and
    rightChild might extend a complete tree themselves, but we
@@ -77,25 +79,17 @@ static Node* expression() {
    5.            (ast)
    /     \
    (leftChild)       (rightChild)
+   
 */  
-static Node* term() {
-    // 1.
-    Node* ast = factor();
+static Node* term() {   
+    Node* ast = factor(); // 1.
     
     while (match(TOKEN_PLUS) || match(TOKEN_MINUS)) {
         advance();
 
-        // 2.
-        // If we get here, we know that the node we parsed above
-        // is the left child of an Operator node in the AST. For
-        // clarity we now rename that node to indicate this
-        // change in perspective.
-        Node* leftChild = ast;
+        Node* leftChild = ast; // 2.
 
         // 3.
-        // Now comes the work of constructing the operator node.
-        // Note that this is a completely fresh and unconnected
-        // node.
         Value* op;
         switch (parser->previous.type) {
         case TOKEN_PLUS:
@@ -108,27 +102,25 @@ static Node* term() {
             error();
         }
         Node* parent = malloc(sizeof(Node));
-
-        // 4.
-        // Now we continue on parsing the tokens after the PLUS
-        // or MINUS token, knowing that it's a right child of
-        // the previously created operator token.
-        Node* rightChild = factor();
+        
+        Node* rightChild = factor(); // 4.
 
         // 5.
-        // Tie it all together and make this new operator node
-        // the new current AST top node.
         parent->value = op;
         parent->lc = leftChild;
         parent->rc = rightChild;
-
-        // 6. The parent is the new "top node".
-        ast = parent;
+        
+        ast = parent; // 6.
     }
 
     return ast;
 }
 
+/* 
+
+   factor -> primary (("*" | "/") primary)*
+   
+*/
 static Node* factor() {
     Node* ast = primary();
 
@@ -160,12 +152,25 @@ static Node* factor() {
     return ast;
 }
 
+/* 
+
+   primary -> NUM
+   
+*/
 static Node* primary() {
     if (match(TOKEN_NUMBER)) {
+        advance();
+       
+        // Convert lexeme of type string to type long long.
+        char* lexemeStart = parser->previous.start;
+        long long num = strtoll(lexemeStart, NULL, 10);
+       
         Node* prim = malloc(sizeof(Node));
-        prim->value = consNum(10); // TODO: Extract value from token.
+       
+        prim->value = consNum(num);       
         prim->lc = NULL;
         prim->rc = NULL;
+       
         return prim;
     }
 
