@@ -59,7 +59,7 @@ Value* consNum(long long val) {
 
 /*
 Give this function an ast, and it will print it in prefix notation.
-A tree such as the one below will be printed as (+ 1 (* 2 3)).
+A tree such as the one below will be printed in order as (+ 1 (* 2 3)).
 
     +
  1     *
