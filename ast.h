@@ -21,11 +21,17 @@ typedef enum {
     NUMBER,
 } ValueType;
 
+// This struct is essentially the most atomic part of the whole
+// interpreter. When evaluating the AST, all we have to work on
+// are structs like this one.
+//
+// Currently only operators and numbers are allowed. Eventually
+// the union will also contain strings and keywords etc.
 typedef struct {
-    ValueType type;
+    ValueType type;   
     union {
         Operator  op;
-        long long value;
+        long long value; // TODO: rename this to "number"
     } content;
 } Value;
 
