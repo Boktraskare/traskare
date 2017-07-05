@@ -4,6 +4,10 @@
 
    This file contains everything related to the construction of
    AST nodes and their value.
+
+   consNode() and tokenToValue() are the only functions needed
+   to construct nodes for the AST. These functions are called
+   by the parser.
    
    ---------------------------------------------------------- */
 
@@ -18,7 +22,7 @@ static void printExpr(Node*);
 static void printOp(Operator);
 static Value* consOpVal(Operator op);
 static Value* consNumVal(long long val);
-static boolean expr(Node*);
+static bool expr(Node*);
 void printParenthesized(Node*);
 
 Node* consNode(Node* lc, Value* v, Node* rc) {
@@ -27,6 +31,8 @@ Node* consNode(Node* lc, Value* v, Node* rc) {
     n->value = v;
     n->lc    = lc;
     n->rc    = rc;
+
+    return n;
 }
 
 // The parser works on a stream of tokens, and a token is nothing more
@@ -35,12 +41,17 @@ Node* consNode(Node* lc, Value* v, Node* rc) {
 // is where our source code turns into C.
 Value* tokenToValue(Token t) {
     switch(t.type) {
-       case TOKEN_NUMBER: return consNumVal(strtoll(t.start, NULL, 10)) break;
-       case TOKEN_PLUS:   return consOpVal(OP_ADD) break;
-       case TOKEN_MINUS:  return consOpVal(OP_SUB) break;
-       case TOKEN_MUL:    return consOpVal(OP_MUL) break;
-       case TOKEN_DIV:    return consOpVal(OP_DIV) break;
+    case TOKEN_NUMBER: return consNumVal(strtoll(t.start, NULL, 10)); break;
+    case TOKEN_PLUS:   return consOpVal(OP_ADD); break;
+    case TOKEN_MINUS:  return consOpVal(OP_SUB); break;
+    case TOKEN_MUL:    return consOpVal(OP_MUL); break;
+    case TOKEN_DIV:    return consOpVal(OP_DIV); break;
+    case TOKEN_EOF:
+    case TOKEN_ERROR:
+        return NULL;
     }
+
+    return NULL;
 }
 
 static Value* consOpVal(Operator op) {
@@ -108,7 +119,7 @@ void printParenthesized(Node* ast) {
     printf(")");
 }
 
-static boolean expr(Node* ast) {
+static bool expr(Node* ast) {
     return (ast->lc != NULL || ast->rc != NULL);
 }
 

@@ -86,6 +86,9 @@ Token scanToken() {
 
     switch (c) {
         case '+': return makeToken(TOKEN_PLUS); break;
+        case '-': return makeToken(TOKEN_MINUS); break;
+        case '*': return makeToken(TOKEN_MUL); break;
+        case '/': return makeToken(TOKEN_DIV); break;
 
         default:
                   if(isDigit(c)) {

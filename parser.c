@@ -32,19 +32,16 @@ typedef struct {
 static Node* primary();
 static Node* expression();
 static Node* term();
+static bool maa(TokenType);
 
-static Parser* parser;
+static Parser parser;
 
 void initParser() {
-    parser->current  = scanToken();
-    parser->previous = parser->current;
+    parser.current  = scanToken();
+    parser.previous = parser.current;
 }
 
 Node* parse() {
-    if (!parser) {
-        error();
-    }
-
     return expression();
 }
 
@@ -56,7 +53,7 @@ static Node* term() {
     Node* ast = factor();
     
     while (maa(TOKEN_PLUS) || maa(TOKEN_MINUS)) {
-        Value* val = tokenToValue(parser->previous);
+        Value* val = tokenToValue(parser.previous);
         Node* n = consNode(ast, val, factor());        
         ast = n;
     }
@@ -68,7 +65,7 @@ static Node* factor() {
     Node* ast = primary();
 
     while (maa(TOKEN_MUL) || maa(TOKEN_DIV)) {
-        Value* val = tokenToValue(parser->previous);
+        Value* val = tokenToValue(parser.previous);
         Node* n = consNode(ast, val, primary());
         ast = n;
     }
@@ -78,9 +75,9 @@ static Node* factor() {
 
 static Node* primary() {
     if (maa(TOKEN_NUMBER)) {
-        Value* val = tokenToValue(parser->previous);
+        Value* val = tokenToValue(parser.previous);
         Node* n = consNode(NULL, val, NULL);
-        return prim;
+        return n;
     }
 
    // Last stop.
@@ -99,12 +96,12 @@ static bool maa(TokenType t) {
 }
 
 static bool match(TokenType t) {
-    return parser->current.type == t;
+    return parser.current.type == t;
 }
 
 static void advance() {
-    parser->previous = parser->current;
-    parser->current = scanToken();
+    parser.previous = parser.current;
+    parser.current = scanToken();
 }
 
 // TODO: How to handle errors?

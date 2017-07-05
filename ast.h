@@ -9,6 +9,8 @@
 #ifndef ast_h
 #define ast_h
 
+#include "token.h"
+
 typedef enum {
     OP_ADD,
     OP_SUB,
@@ -42,7 +44,7 @@ typedef struct Node {
     Node*  rc;
 } Node;
 
-Node* consNode(Node*, Value*, Node*)
+Node* consNode(Node*, Value*, Node*);
 Value* tokenToValue(Token);
 void printAst(Node*);
 
