@@ -16,8 +16,10 @@
 static void printValue(Node*);
 static void printExpr(Node*);
 static void printOp(Operator);
-static Value* consOpVal(Operator op)
-static Value* consNumVal(long long val)
+static Value* consOpVal(Operator op);
+static Value* consNumVal(long long val);
+static boolean expr(Node*);
+void printParenthesized(Node*);
 
 Node* consNode(Node* lc, Value* v, Node* rc) {
     Node* n = malloc(sizeof(Node));
@@ -85,15 +87,29 @@ static Value* consNumVal(long long val) {
 
    ---------------------------------------------------------- */
 void printAst(Node* ast) {
+    if (ast == NULL) {
+        return;
+    }
+   
+    if (expr(ast)) {
+        printParenthesized(ast);
+    } else {
+        printValue(ast);
+    }
+}
+
+void printParenthesized(Node* ast) {
+    printf("(");
     printValue(ast);
+    printf(" ");
+    printAst(ast->lc);
+    printf(" ");
+    printAst(ast->rc);
+    printf(")");
+}
 
-    if (ast->lc != NULL) {
-        printAst(ast);
-    }
-
-    if (ast->rc != NULL) {
-        printAst(ast);
-    }
+static boolean expr(Node* ast) {
+    return (ast->lc != NULL || ast->rc != NULL);
 }
 
 static void printValue(Node* ast) {
