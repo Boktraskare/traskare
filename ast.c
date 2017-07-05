@@ -18,8 +18,10 @@
 
 #include "ast.h"
 
-static void paren(char*, Node*);
-static bool literal(Node*);
+static void printValue(Node*);
+static void printExpr(Node*);
+static void printOp(Operator);
+
 
 // Allocate memory for and construct a Value with the specified
 // operator. Return a pointer to this constructed Value on the
@@ -55,16 +57,15 @@ Value* consNum(long long val) {
     return v;
 }
 
-void printValue(Node*);
-void printExpr(Node*);
-void printOp(Operator);
-
 /*
+Give this function an ast, and it will print it in prefix notation.
+A tree such as the one below will be printed as (+ 1 (* 2 3)).
 
     +
  1     *
      2   3
-
+     
+TODO: Make sure it works.
 */
 void printAst(Node* ast) {
     printValue(ast);
@@ -78,7 +79,7 @@ void printAst(Node* ast) {
     }
 }
 
-void printValue(Node* ast) {
+static void printValue(Node* ast) {
     switch(ast->value->type) {
         case OPERATOR:
             printOp(ast->value->content.op);
@@ -89,7 +90,7 @@ void printValue(Node* ast) {
     }
 }
 
-void printOp(Operator op) {
+static void printOp(Operator op) {
     switch(op) {
         case OP_SUB:
             printf("-");
