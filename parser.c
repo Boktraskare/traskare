@@ -12,7 +12,6 @@
 #include <stdlib.h>
 
 #include "scanner.h"
-
 #include "token.h"
 #include "ast.h"
 
@@ -80,8 +79,7 @@ static Node* primary() {
         return n;
     }
 
-   // Last stop.
-   error();
+   error(); // TODO (Error handling): What to do here?
    return false; // very temporary fix
 }
 
