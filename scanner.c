@@ -96,7 +96,7 @@ Token scanToken() {
                   }
     }
 
-    return makeToken(TOKEN_ERROR);
+    return makeToken(TOKEN_ERROR); // TODO (Error handling): What to do here?
 }
 
 static void skipWhitespace() {
