@@ -16,6 +16,8 @@ long long binary(Node*);
 
 // Evaluating binary expressions of numbers and simple math
 long long binary(Node* ast) {
+   
+    // TODO: These needs to be evaluated recursively
     long long right = ast->rc->value->content.value;
     long long left = ast->lc->value->content.value;
 
