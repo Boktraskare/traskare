@@ -46,14 +46,14 @@ Value* tokenToValue(Token t) {
     case TOKEN_MINUS:  return consOpVal(OP_SUB); break;
     case TOKEN_MUL:    return consOpVal(OP_MUL); break;
     case TOKEN_DIV:    return consOpVal(OP_DIV); break;
-
-    // TODO: How to handle this?
+          
+    // TODO (Error handling): How to handle these?
     case TOKEN_EOF:
     case TOKEN_ERROR:
         return NULL;
     }
 
-    return NULL;
+    return NULL; // TODO (Error handling): What to do here?
 }
 
 static Value* consOpVal(Operator op) {
