@@ -4,6 +4,16 @@
 
    Typedefs and enumerations related to the AST.
 
+   The AST is a simple binary tree, with a Value attached to
+   each node. The value is represented by a tagged union. This
+   union must grow when the language grows to handle new values
+   such as strings and statements.
+
+   The Value struct also shows what types we choose to represent
+   the internal values with. For example, we use long long for
+   every number Value, and an operator is simply an enumeration
+   of Operators.
+
    ---------------------------------------------------------- */
 
 #ifndef ast_h
@@ -23,17 +33,11 @@ typedef enum {
     NUMBER,
 } ValueType;
 
-// This struct is essentially the most atomic part of the whole
-// interpreter. When evaluating the AST, all we have to work on
-// are structs like this one.
-//
-// Currently only operators and numbers are allowed. Eventually
-// the union will also contain strings and keywords etc.
 typedef struct {
     ValueType type;   
     union {
         Operator  op;
-        long long value; // TODO: rename this to "number"
+        long long number;
     } content;
 } Value;
 

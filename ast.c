@@ -23,7 +23,7 @@ static void printOp(Operator);
 static Value* consOpVal(Operator op);
 static Value* consNumVal(long long val);
 static bool expr(Node*);
-void printParenthesized(Node*);
+static void printParenthesized(Node*);
 
 Node* consNode(Node* lc, Value* v, Node* rc) {
     Node* n = malloc(sizeof(Node));
@@ -38,7 +38,7 @@ Node* consNode(Node* lc, Value* v, Node* rc) {
 // The parser works on a stream of tokens, and a token is nothing more
 // than a TokenType and a string lexeme. We must convert these values
 // to the types of the implementation language (C in this case). This
-// is where our source code turns into C.
+// is essentially where our source code of text turns into C.
 Value* tokenToValue(Token t) {
     switch(t.type) {
     case TOKEN_NUMBER: return consNumVal(strtoll(t.start, NULL, 10)); break;
@@ -46,6 +46,8 @@ Value* tokenToValue(Token t) {
     case TOKEN_MINUS:  return consOpVal(OP_SUB); break;
     case TOKEN_MUL:    return consOpVal(OP_MUL); break;
     case TOKEN_DIV:    return consOpVal(OP_DIV); break;
+
+    // TODO: How to handle this?
     case TOKEN_EOF:
     case TOKEN_ERROR:
         return NULL;
@@ -75,7 +77,7 @@ static Value* consNumVal(long long val) {
     }
 
     v->type = NUMBER;
-    v->content.value = val;
+    v->content.number = val;
 
     return v;
 }
@@ -94,8 +96,6 @@ static Value* consNumVal(long long val) {
     1     *
         2   3
      
-   TODO: Make sure it works.
-
    ---------------------------------------------------------- */
 void printAst(Node* ast) {
     if (ast == NULL) {
@@ -109,7 +109,7 @@ void printAst(Node* ast) {
     }
 }
 
-void printParenthesized(Node* ast) {
+static void printParenthesized(Node* ast) {
     printf("(");
     printValue(ast);
     printf(" ");
@@ -129,7 +129,7 @@ static void printValue(Node* ast) {
             printOp(ast->value->content.op);
             break;
         case NUMBER:
-            printf("%llu", ast->value->content.value);
+            printf("%llu", ast->value->content.number);
             break;
     }
 }

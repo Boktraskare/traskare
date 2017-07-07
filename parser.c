@@ -66,8 +66,7 @@ static Node* factor() {
 
     while (maa(TOKEN_MUL) || maa(TOKEN_DIV)) {
         Value* val = tokenToValue(parser.previous);
-        Node* n = consNode(ast, val, primary());
-        ast = n;
+        ast = consNode(ast, val, primary());
     }
 
     return ast;
