@@ -17,6 +17,8 @@ static void run(const char* source) {
     initParser();
     Node* ast = parse();
     printAst(ast);
+    
+    // TODO: Free the memory occupied by the tree
 }
 
 // A read-eval-print loop for interactive testing of the interpreter.
@@ -36,7 +38,7 @@ static void repl() {
         line[strlen(line) - 1] = '\0';
 
         run(line);
-        printf("\n"); 
+        printf("\n");
     }
 }
 
