@@ -6,6 +6,10 @@
    parser will consume at will, a token at a time. The output
    is the abstract syntax tree (AST).
 
+   In this file we  look at the syntactic category of the
+   current token to figure out how it should be parsed. See
+   token.h for more info on the implementation of tokens.
+
    ---------------------------------------------------------- */
 
 #include <stdbool.h>
@@ -52,7 +56,7 @@ static Node* term() {
     Node* ast = factor();
     
     while (maa(SC_ADD) || maa(SC_SUB)) {
-        Value* val = tokenToValue(parser.previous);
+        Value* val = ttov(parser.previous);
         ast = consNode(ast, val, factor());        
     }
 
@@ -63,7 +67,7 @@ static Node* factor() {
     Node* ast = primary();
 
     while (maa(SC_MUL) || maa(SC_DIV)) {
-        Value* val = tokenToValue(parser.previous);
+        Value* val = ttov(parser.previous);
         ast = consNode(ast, val, primary());
     }
 
@@ -72,12 +76,12 @@ static Node* factor() {
 
 static Node* primary() {
     if (maa(SC_NUM)) {
-        Value* val = tokenToValue(parser.previous);
+        Value* val = ttov(parser.previous);
         return consNode(NULL, val, NULL);
     }
 
-   error(); // TODO (Error handling): What to do here?
-   return false; // very temporary fix
+    error(); // TODO (Error handling): What to do here?
+    return false; // very temporary fix
 }
 
 // Match and Advance
@@ -87,7 +91,7 @@ static bool maa(Syncat syncat) {
         return true;
     }
    
-   return false;
+    return false;
 }
 
 static bool match(Syncat syncat) {

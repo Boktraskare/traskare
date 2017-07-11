@@ -35,11 +35,12 @@ Node* consNode(Node* lc, Value* v, Node* rc) {
     return n;
 }
 
+// Token to value
 // The parser works on a stream of tokens, and a token is nothing more
 // than a TokenType and a string lexeme. We must convert these values
 // to the types of the implementation language (C in this case). This
 // is essentially where our source code of text turns into C.
-Value* tokenToValue(Token t) {
+Value* ttov(Token t) {
     switch(t.syncat) {
     case SC_ADD: return consOpVal(OP_ADD); break;
     case SC_SUB: return consOpVal(OP_SUB); break;

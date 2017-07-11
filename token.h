@@ -1,15 +1,21 @@
-#ifndef token_h
-#define token_h
-
 /* ----------------------------------------------------------
 
    TOKEN HEADER
 
-   This file contains every declaration needed to handle tokems.
+   A token is lexeme, the syntactic category for that lexme,
+   and the line number it appeared on. All a "token" really is
+   then is the source text, divided into it's words and some
+   metadata on those words.
+
+   The lexeme is the word as it appeared in the source, as a
+   string. The syntactic category is the classification of
+   the word (like noun or verb in regular languages).
 
    ---------------------------------------------------------- */
 
-// Syntactic categories (token types).
+#ifndef token_h
+#define token_h
+
 typedef enum {
     SC_NUM,
     SC_ADD,

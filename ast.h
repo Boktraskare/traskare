@@ -49,7 +49,7 @@ typedef struct Node {
 } Node;
 
 Node* consNode(Node*, Value*, Node*);
-Value* tokenToValue(Token);
+Value* ttov(Token);
 void printAst(Node*);
 
 #endif
