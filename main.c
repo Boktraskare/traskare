@@ -45,7 +45,7 @@ static void repl() {
         }
 
         run(line);
-        printf("\n"); 
+        printf("\n");
     }
 }
 
