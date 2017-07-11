@@ -1,3 +1,16 @@
+/* ----------------------------------------------------------
+
+   TRASKARE ENTRY POINT
+
+   Overview
+   
+   The interpreter is made up of three phases: scanning, parsing
+   and evaluation. The scanner and the parser are global objects
+   (but statically declared) hence the no arguments calls to 
+   initParser() and parse().
+
+   ---------------------------------------------------------- */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,37 +23,32 @@
 
 #define MAX_LINE_LENGTH 1024
 
-// The entrypoint of the interpreter. Note that the scanner and
-// and parser are global objects.
 static void run(const char* source) {
     initScanner(source);
     initParser();
-    Node* ast = parse();
-    printAst(ast);
+    printAst(parse());
 }
 
-// A read-eval-print loop for interactive testing of the interpreter.
 static void repl() {
     char line[MAX_LINE_LENGTH];
     
     while (true) {
-        printf("trask > "); 
+        printf("trask > ");
 
-        // Exit REPL if fgets unsuccessful
         if (!fgets(line, MAX_LINE_LENGTH, stdin)) {
             printf("\n"); 
             break;
         }
 
-        // Cut last "\n"
-        line[strlen(line) - 1] = '\0';
+        if (line[strlen(line) - 1] == '\n') {
+            line[strlen(line) - 1] = '\0';
+        }
 
         run(line);
         printf("\n"); 
     }
 }
 
-// Read the file specified at path and feed it to run().
 static void runFile(const char* path) {
     printf("%s", path);
 } 

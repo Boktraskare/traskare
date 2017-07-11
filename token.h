@@ -9,41 +9,28 @@
 
    ---------------------------------------------------------- */
 
-// The different token types currently available. These are just
-// enums, and so they have no string representation. To print a
-// the name of a token type you have to use ttos (string to
-// token).
+// Syntactic categories (token types).
 typedef enum {
-    TOKEN_NUMBER,
-    TOKEN_PLUS,
-    TOKEN_MINUS,
-    TOKEN_MUL,
-    TOKEN_DIV,
-    TOKEN_EOF,
-    TOKEN_ERROR,
-} TokenType;
+    SC_NUM,
+    SC_ADD,
+    SC_SUB,
+    SC_MUL,
+    SC_DIV,
+    SC_EOF,
+    SC_ERR,
+} Syncat;
 
-// Every metadata we need about a token is held in a structure
-// like this one. Besides having a type, a token knows of the
-// specific lexeme in the source which this token was made out
-// of.
 typedef struct {
-    TokenType   type;
     const char* start;
-    int         length;
-    int         line;
+    int length;
+} Lexeme;
+
+typedef struct {
+    Syncat syncat;
+    Lexeme lexeme;
+    int    lineNumber;
 } Token;
 
-// A token and it's string representation. Since we can't print
-// enums to inspect the TokenTypes in the ouput of the scanner
-// we need to store the string representation of each TokenType
-// we would like to print.
-typedef struct {
-    TokenType   type;
-    const char* string;
-} TokenToString;
-
-// Just a a helper method to return the token type as a string.
-const char* ttos(TokenType type);
+const char* cattostr(Syncat syncat);
 
 #endif

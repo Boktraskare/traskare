@@ -40,16 +40,17 @@ Node* consNode(Node* lc, Value* v, Node* rc) {
 // to the types of the implementation language (C in this case). This
 // is essentially where our source code of text turns into C.
 Value* tokenToValue(Token t) {
-    switch(t.type) {
-    case TOKEN_NUMBER: return consNumVal(strtoll(t.start, NULL, 10)); break;
-    case TOKEN_PLUS:   return consOpVal(OP_ADD); break;
-    case TOKEN_MINUS:  return consOpVal(OP_SUB); break;
-    case TOKEN_MUL:    return consOpVal(OP_MUL); break;
-    case TOKEN_DIV:    return consOpVal(OP_DIV); break;
+    switch(t.syncat) {
+    case SC_ADD: return consOpVal(OP_ADD); break;
+    case SC_SUB: return consOpVal(OP_SUB); break;
+    case SC_MUL: return consOpVal(OP_MUL); break;
+    case SC_DIV: return consOpVal(OP_DIV); break;
+    case SC_NUM:
+        return consNumVal(strtoll(t.lexeme.start, NULL, 10)); break;
           
     // TODO (Error handling): How to handle these?
-    case TOKEN_EOF:
-    case TOKEN_ERROR:
+    case SC_EOF:
+    case SC_ERR:
         return NULL;
     }
 

@@ -1,13 +1,9 @@
+/* ----------------------------------------------------------
 
-
-/*
- *  HEADER FOR EVALUATING EXPRESSIONS
- *
- */
-
-
-
-
-
+   EVALUATION HEADER FILE
+   
+   ---------------------------------------------------------- */
 
 #include "ast.h"
+
+void eval(Node*);

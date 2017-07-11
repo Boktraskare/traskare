@@ -31,7 +31,7 @@ typedef struct {
 static Node* primary();
 static Node* expression();
 static Node* term();
-static bool maa(TokenType);
+static bool maa(Syncat);
 
 static Parser parser;
 
@@ -51,10 +51,9 @@ static Node* expression() {
 static Node* term() {   
     Node* ast = factor();
     
-    while (maa(TOKEN_PLUS) || maa(TOKEN_MINUS)) {
+    while (maa(SC_ADD) || maa(SC_SUB)) {
         Value* val = tokenToValue(parser.previous);
-        Node* n = consNode(ast, val, factor());        
-        ast = n;
+        ast = consNode(ast, val, factor());        
     }
 
     return ast;
@@ -63,7 +62,7 @@ static Node* term() {
 static Node* factor() {
     Node* ast = primary();
 
-    while (maa(TOKEN_MUL) || maa(TOKEN_DIV)) {
+    while (maa(SC_MUL) || maa(SC_DIV)) {
         Value* val = tokenToValue(parser.previous);
         ast = consNode(ast, val, primary());
     }
@@ -72,10 +71,9 @@ static Node* factor() {
 }
 
 static Node* primary() {
-    if (maa(TOKEN_NUMBER)) {
+    if (maa(SC_NUM)) {
         Value* val = tokenToValue(parser.previous);
-        Node* n = consNode(NULL, val, NULL);
-        return n;
+        return consNode(NULL, val, NULL);
     }
 
    error(); // TODO (Error handling): What to do here?
@@ -83,8 +81,8 @@ static Node* primary() {
 }
 
 // Match and Advance
-static bool maa(TokenType t) {
-    if (match(t)) {
+static bool maa(Syncat syncat) {
+    if (match(syncat)) {
         advance();
         return true;
     }
@@ -92,8 +90,8 @@ static bool maa(TokenType t) {
    return false;
 }
 
-static bool match(TokenType t) {
-    return parser.current.type == t;
+static bool match(Syncat syncat) {
+    return parser.current.syncat == syncat;
 }
 
 static void advance() {

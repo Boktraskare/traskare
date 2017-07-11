@@ -10,20 +10,25 @@
 
 #include "token.h"
 
-TokenToString tokenToString[] = {
-    {TOKEN_NUMBER, "TOKEN_NUMBER"}, 
-    {TOKEN_PLUS,   "TOKEN_PLUS"}, 
-    {TOKEN_EOF,    "TOKEN_EOF"}, 
-    {TOKEN_ERROR,  "TOKEN_ERROR"}, 
+typedef struct {
+    Syncat syncat;
+    const char* string;
+} SyncatToString;
+
+static SyncatToString syncatToString[] = {
+    {SC_NUM, "SC_NUM"}, 
+    {SC_ADD, "SC_ADD"}, 
+    {SC_EOF, "SC_EOF"}, 
+    {SC_ERR, "SC_ERR"}, 
 };
 
-// Convert a token type to it's string representation.
-const char* ttos(TokenType type) {
-    TokenToString* table = tokenToString;
-    TokenToString* endOfTable = table + sizeof(tokenToString)/sizeof(tokenToString[0]);
+// Convert a syntactic category to it's string representation
+const char* cattostr(Syncat syncat) {
+    SyncatToString* table = syncatToString;
+    SyncatToString* end = table + sizeof(syncatToString)/sizeof(syncatToString[0]);
 
-    while (table < endOfTable) {
-        if (table->type == type) {
+    while (table < end) {
+        if (table->syncat == syncat) {
             return table->string;
         }
 
