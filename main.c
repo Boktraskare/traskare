@@ -20,6 +20,7 @@
 #include "token.h"
 #include "parser.h"
 #include "ast.h"
+#include "printing.h"
 
 #define MAX_LINE_LENGTH 1024
 
@@ -27,6 +28,7 @@ static void run(const char* source) {
     initScanner(source);
     initParser();
     printAst(parse());
+    // freeAst();
 }
 
 static void repl() {

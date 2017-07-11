@@ -1,25 +1,25 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-
-#include "scanner.h"
-#include "token.h"
-
 /* ----------------------------------------------------------
 
    SCANNER
 
    The only interface to the scanner is simply the scanToken()
    function. This means that the lexer analyses the source for 
-   tokens "on the fly". No list of tokens is ever buffered. This 
-   detail is completely transparent to the parser. All the parser
-   needs is a way to get the next token, and instead of giving
-   the parser a list of tokens to walk, it is given a scanner
-   to call scanToken() on, which has the same effect. this saves
+   tokens "on demand". No list of tokens is ever buffered. This 
+   detail is completely transparent to the parser. This saves
    us from having to buffer a list of tokens between the scanner
    and the parser.
 
+   To understand everything that goes on in the scanner you
+   should have a look at the token implementation.
+
    ---------------------------------------------------------- */
+
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+#include "scanner.h"
+#include "token.h"
 
 static bool end();
 static void skipWhitespace();
@@ -72,7 +72,6 @@ Token scanToken() {
     return makeToken(SC_ERR); // TODO (Error handling): What to do here?
 }
 
-// Attach some metadata on the token.
 static Token makeToken(Syncat syncat) {
     Token token;
     token.syncat = syncat;
@@ -100,27 +99,19 @@ static void skipWhitespace() {
     }
 }
 
-static bool end() {
-    return *scanner.current == '\0';
-}
-
-// Check if it is a number
 static bool isDigit(char c) {
     return c >= '0' && c <= '9';
 }
 
-// Advance the scanner to the next character
 static char advance() {
     scanner.current++;
     return scanner.current[-1];
 }
 
-// Look at the current character
 static char peek() {
     return *scanner.current;
 }
 
-// What to do if the character is a number
 static Token number() {
     while (isDigit(peek())) advance();
     return makeToken(SC_NUM);

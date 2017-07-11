@@ -50,6 +50,6 @@ typedef struct Node {
 
 Node* consNode(Node*, Value*, Node*);
 Value* ttov(Token);
-void printAst(Node*);
+bool freeAst(Node*);
 
 #endif
