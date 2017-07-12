@@ -21,13 +21,20 @@
 #include "parser.h"
 #include "ast.h"
 #include "printing.h"
+#include "eval.h"
 
 #define MAX_LINE_LENGTH 1024
 
 static void run(const char* source) {
     initScanner(source);
     initParser();
-    printAst(parse());
+
+    Node* ast = parse();
+
+    printAst(ast);
+    printf("\n");
+    printf("%llu", eval(ast));
+
     // freeAst();
 }
 

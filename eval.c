@@ -10,7 +10,7 @@
    function or operator in the implementation language (C).
    
    ---------------------------------------------------------- */
-/*
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -18,38 +18,29 @@
 #include "eval.h"
 #include "ast.h"
 
-// TODO: Move all printing of Values here.
-// #include "print.h"
+#include "printing.h"
 
 static long long binary(Node*);
 
-void eval(Node* ast) {
+long long eval(Node* ast) {
     switch(ast->value->type) {
-    case OPERATOR:
-        binary(ast);
-        break;
-    case NUMBER:
-        ast->value.content.number;
-        break;
+        case OPERATOR: return binary(ast); break;
+        case NUMBER: return ast->value->content.number; break;
     }
+
+    return -1337; // TODO (error handling)
 }
 
 static long long binary(Node* ast) {
-    Value* lc = eval(ast->lc);
-    Value* rc = eval(ast->rc);
-
-    switch(ast->value->content.op) 
-        case OP_ADD: return lc + rc;
-        case OP_SUB: return lc - rc;
-        case OP_MUL: return lc * rc;
-        case OP_DIV: return lc / rc;    
+    Node* lc = ast->lc;
+    Node* rc = ast->rc;
+    
+    switch(ast->value->content.op) {
+        case OP_ADD: return eval(lc) + eval(rc); break;
+        case OP_SUB: return eval(lc) - eval(rc); break;
+        case OP_MUL: return eval(lc) * eval(rc); break;
+        case OP_DIV: return eval(lc) / eval(rc); break;
     }
 
-    return NULL;
+    return -1337; // TODO (error handling)
 }
-
-
-
-
- 
-*/

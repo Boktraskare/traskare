@@ -6,4 +6,4 @@
 
 #include "ast.h"
 
-void eval(Node*);
+long long eval(Node*);
