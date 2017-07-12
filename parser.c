@@ -6,9 +6,12 @@
    parser will consume at will, a token at a time. The output
    is the abstract syntax tree (AST).
 
-   In this file we  look at the syntactic category of the
-   current token to figure out how it should be parsed. See
+   In the parser we look at the syntactic category of the
+   current token and construct the appropriate value. See
    token.h for more info on the implementation of tokens.
+   
+   TODO: Refactor the parsing functions to allow better error
+         handling.
 
    ---------------------------------------------------------- */
 
