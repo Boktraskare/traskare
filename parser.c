@@ -84,6 +84,12 @@ static Node* primary() {
         return consNode(NULL, val, NULL);
     }
 
+    if (maa(SC_LPR)) {
+        Node* ast = expression();
+        if (!maa(SC_RPR)) error();
+        return ast;
+    }
+
     error(); // TODO (Error handling): What to do here?
     return false; // very temporary fix
 }

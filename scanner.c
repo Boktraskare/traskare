@@ -63,6 +63,8 @@ Token scanToken() {
         case '-': return makeToken(SC_SUB); break;
         case '*': return makeToken(SC_MUL); break;
         case '/': return makeToken(SC_DIV); break;
+        case '(': return makeToken(SC_LPR); break;
+        case ')': return makeToken(SC_RPR); break;
         default:
             if(isDigit(c)) {
                 return number();
