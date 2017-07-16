@@ -1,3 +1,5 @@
-* Roadmap
-** TODO Choose method for error handling
-** TODO 
+* Boktraskare
+  A tree walking interpreter in C.
+** Roadmap
+   - Choose a method for error handling
+     
