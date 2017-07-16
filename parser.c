@@ -12,7 +12,6 @@
    
    TODO: Refactor the parsing functions to allow better error
          handling.
-   TODO: Implement parenthesis parsing
 
    ---------------------------------------------------------- */
 
