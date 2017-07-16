@@ -2,4 +2,4 @@
   A tree walking interpreter in C.
 ** Roadmap
    - Choose a method for error handling
-     
+   - Parsing statements
