@@ -30,7 +30,7 @@ static bool match();
 static void advance();
 
 typedef struct {
-    Token current;
+    Token current; // Lookahead LL(1)
     Token previous;
     Node* ast;
 } Parser;
