@@ -96,7 +96,7 @@ static Node* primary() {
     Node* ast = expression();
     if (!maa(SC_RPR)) {
       setError();
-      consErrorNode("Errror, expected left paren");
+      return consErrorNode("Errror, expected left paren");
     }
     return ast;
   }
