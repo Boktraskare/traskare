@@ -22,33 +22,40 @@
 #include "token.h"
 
 typedef enum {
-    OP_ADD,
-    OP_SUB,
-    OP_MUL,
-    OP_DIV
+  OP_ADD,
+  OP_SUB,
+  OP_MUL,
+  OP_DIV
 } Operator;
 
 typedef enum {
-    OPERATOR,
-    NUMBER,
+  OPERATOR,
+  NUMBER,
 } ValueType;
 
 typedef struct {
-    ValueType type;   
-    union {
-        Operator  op;
-        long long number;
-    } content;
+  ValueType type;   
+  union {
+    Operator  op;
+    long long number;
+  } content;
 } Value;
 
 typedef struct Node Node;
 typedef struct Node {
-    Value* value;
-    Node*  lc;
-    Node*  rc;
+  const char* err;
+  Value* value;
+  Node*  lc;
+  Node*  rc;
 } Node;
 
+typedef struct {
+  int error;
+  Node* root;
+} Ast;
+
 Node* consNode(Node*, Value*, Node*);
+Node* consErrorNode(const char* s);
 Value* ttov(Token);
 bool freeAst(Node*);
 

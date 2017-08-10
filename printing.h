@@ -22,7 +22,7 @@ static const SyncatToString syncatToString[] = {
     {SC_NUM, "SC_NUM"}, 
     {SC_ADD, "SC_ADD"}, 
     {SC_EOF, "SC_EOF"}, 
-    {SC_ERR, "SC_ERR"}, 
+    {SC_UKN, "SC_UKN"}, 
 };
 
 #endif

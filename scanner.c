@@ -22,7 +22,7 @@
 #include "token.h"
 
 static bool end();
-static void skipWhitespace();
+static void whitespace();
 static char peekNext();
 static Token number();
 static bool isAtEnd();
@@ -30,91 +30,98 @@ static char peek();
 static bool isDigit(char c);
 static char advance();
 static Token makeToken(Syncat);
+static bool eof();
 
 typedef struct {
-    const char* source;
-    const char* lexemeStart;
-    const char* current;
-    int line;
+  const char* source;
+  const char* lexeme;
+  const char* current;
+  int line;
 } Scanner;
 
 static Scanner scanner;
 
 void initScanner(const char* source) {
-    scanner.source      = source;
-    scanner.lexemeStart = source;
-    scanner.current     = source;
-    scanner.line        = 1;    
+  scanner.source      = source;
+  scanner.lexeme = source;
+  scanner.current     = source;
+  scanner.line        = 1;    
 }
 
 Token scanToken() {
-    skipWhitespace();
+  whitespace();
+  scanner.lexeme = scanner.current;
+  if (eof()) return makeToken(SC_EOF);
 
-    scanner.lexemeStart = scanner.current;
+  char c = advance();
+  switch (c) {
+    case '+': return makeToken(SC_ADD); break;
+    case '-': return makeToken(SC_SUB); break;
+    case '*': return makeToken(SC_MUL); break;
+    case '/': return makeToken(SC_DIV); break;
+    case '(': return makeToken(SC_LPR); break;
+    case ')': return makeToken(SC_RPR); break;
+    default:
+      if(isDigit(c)) {
+        return number();
+      }
+  }
 
-    if (*scanner.current == '\0') {
-        return makeToken(SC_EOF);
-    }
+  /*
+  ** If the scanner comes across a character it doesn't know
+  ** what to do with it emits a token with the syntactic
+  ** category of "unknown" and leaves it to the caller to
+  ** decide whatever that means.
+  */
 
-    char c = advance();
-
-    switch (c) {
-        case '+': return makeToken(SC_ADD); break;
-        case '-': return makeToken(SC_SUB); break;
-        case '*': return makeToken(SC_MUL); break;
-        case '/': return makeToken(SC_DIV); break;
-        case '(': return makeToken(SC_LPR); break;
-        case ')': return makeToken(SC_RPR); break;
-        default:
-            if(isDigit(c)) {
-                return number();
-            }
-    }
-
-    return makeToken(SC_ERR); // TODO (Error handling): What to do here?
+  return makeToken(SC_UKN);
 }
 
 static Token makeToken(Syncat syncat) {
-    Token token;
-    token.syncat = syncat;
-    token.lexeme.start = scanner.lexemeStart;
-    token.lexeme.length = (int) (scanner.current - scanner.lexemeStart);
-    token.lineNumber = scanner.line;
-    return token;
+  Token token;
+  token.syncat = syncat;
+  token.lexeme.start = scanner.lexeme;
+  token.lexeme.length = (int) (scanner.current - scanner.lexeme);
+  token.lineNumber = scanner.line;
+  return token;
 }
 
-static void skipWhitespace() {
-    while (true) {
-        switch(peek()) {
-            case ' ':
-            case '\r':
-            case '\t':
-                advance();
-                break;
-            case '\n':
-                scanner.line++;
-                advance();
-                break;
-            default:
-                return;
-        }
+static void whitespace() {
+  while (true) {
+    switch(peek()) {
+      case ' ':
+      case '\r':
+      case '\t':
+        advance();
+        break;
+      case '\n':
+        scanner.line++;
+        advance();
+        break;
+      default:
+        return;
     }
+  }
 }
 
 static bool isDigit(char c) {
-    return c >= '0' && c <= '9';
+  return c >= '0' && c <= '9';
 }
 
 static char advance() {
-    scanner.current++;
-    return scanner.current[-1];
+  scanner.current++;
+  return scanner.current[-1];
 }
 
 static char peek() {
-    return *scanner.current;
+  return *scanner.current;
 }
 
 static Token number() {
-    while (isDigit(peek())) advance();
-    return makeToken(SC_NUM);
+  while (isDigit(peek())) advance();
+  return makeToken(SC_NUM);
+}
+
+static bool eof() {
+  return *scanner.current == '\0';
 }

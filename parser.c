@@ -9,9 +9,6 @@
    In the parser we look at the syntactic category of the
    current token and construct the appropriate value. See
    token.h for more info on the implementation of tokens.
-   
-   TODO: Refactor the parsing functions to allow better error
-         handling.
 
    ---------------------------------------------------------- */
 
@@ -30,89 +27,103 @@ static bool match();
 static void advance();
 
 typedef struct {
-    Token current; // Lookahead LL(1)
-    Token previous;
-    Node* ast;
+  Token current; // Lookahead LL(1)
+  Token previous;
+  Node* ast;
 } Parser;
 
 static Node* primary();
 static Node* expression();
 static Node* term();
 static bool maa(Syncat);
+static void setError();
 
 static Parser parser;
 
+
 void initParser() {
-    parser.current  = scanToken();
-    parser.previous = parser.current;
+  parser.current  = scanToken();
+  parser.previous = parser.current;
 }
 
-Node* parse() {
-    return expression();
+/*
+** error is set whenever the parser can't parse something. This
+** flag indicates to the caller of the parser that the returned
+** ast is not fit for execution and should be traversed and it's
+** errors reported to the user of the program.
+*/
+
+static bool errOccurred = false;
+
+Ast parse() {
+  Node* root = expression();
+  return (Ast) { .error = (errOccurred ? 1 : 0), .root = root };
 }
 
 static Node* expression() {
-    return term(); 
+  return term(); 
 }
 
 static Node* term() {   
-    Node* ast = factor();
+  Node* ast = factor();
     
-    while (maa(SC_ADD) || maa(SC_SUB)) {
-        Value* val = ttov(parser.previous);
-        ast = consNode(ast, val, factor());        
-    }
+  while (maa(SC_ADD) || maa(SC_SUB)) {
+    Value* val = ttov(parser.previous);
+    ast = consNode(ast, val, factor());        
+  }
 
-    return ast;
+  return ast;
 }
 
 static Node* factor() {
-    Node* ast = primary();
+  Node* ast = primary();
 
-    while (maa(SC_MUL) || maa(SC_DIV)) {
-        Value* val = ttov(parser.previous);
-        ast = consNode(ast, val, primary());
-    }
+  while (maa(SC_MUL) || maa(SC_DIV)) {
+    Value* val = ttov(parser.previous);
+    ast = consNode(ast, val, primary());
+  }
 
-    return ast;
+  return ast;
 }
 
 static Node* primary() {
-    if (maa(SC_NUM)) {
-        Value* val = ttov(parser.previous);
-        return consNode(NULL, val, NULL);
-    }
+  if (maa(SC_NUM)) {
+    Value* val = ttov(parser.previous);
+    return consNode(NULL, val, NULL);
+  }
 
-    if (maa(SC_LPR)) {
-        Node* ast = expression();
-        if (!maa(SC_RPR)) error();
-        return ast;
+  if (maa(SC_LPR)) {
+    Node* ast = expression();
+    if (!maa(SC_RPR)) {
+      setError();
+      consErrorNode("Errror, expected left paren");
     }
+    return ast;
+  }
 
-    error(); // TODO (Error handling): What to do here?
-    return false; // very temporary fix
+  setError();
+  return consErrorNode("Error parsing");
 }
 
 // Match and Advance
 static bool maa(Syncat syncat) {
-    if (match(syncat)) {
-        advance();
-        return true;
-    }
+  if (match(syncat)) {
+    advance();
+    return true;
+  }
    
-    return false;
+  return false;
 }
 
 static bool match(Syncat syncat) {
-    return parser.current.syncat == syncat;
+  return parser.current.syncat == syncat;
 }
 
 static void advance() {
-    parser.previous = parser.current;
-    parser.current = scanToken();
+  parser.previous = parser.current;
+  parser.current = scanToken();
 }
 
-// TODO: How to handle errors?
-static void error() {
-    exit(1);
+static void setError() {
+  errOccurred = true;
 }

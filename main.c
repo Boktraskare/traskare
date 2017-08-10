@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------
 
-   TRASKARE ENTRY POINT
+   Traskare ENTRY POINT
 
    Overview
    
@@ -25,52 +25,65 @@
 
 #define MAX_LINE_LENGTH 1024
 
-static void run(const char* source) {
-    initScanner(source);
-    initParser();
+static int run(const char* source) {
+  initScanner(source);
+  initParser();
 
-    Node* ast = parse();
+  Ast ast = parse();
 
-    printAst(ast);
-    printf("\n");
-    printf("%llu", eval(ast));
+  /*
+  ** Check if the parser completed without errors, if it didn't we
+  ** report the errors to the user.
+  */
 
-    // freeAst();
+  if (ast.error){
+    // reportErrors(ast);
+    return 1;
+  } else {
+    // eval(ast);
+    return 0;
+  }
+
+  //printAst(ast);
+  //printf("\n");
+  //printf("%llu", eval(ast));
+
+  // freeAst();
 }
 
 static void repl() {
-    char line[MAX_LINE_LENGTH];
+  char line[MAX_LINE_LENGTH];
     
-    while (true) {
-        printf("trask > ");
+  while (true) {
+    printf("trask > ");
 
-        if (!fgets(line, MAX_LINE_LENGTH, stdin)) {
-            printf("\n"); 
-            break;
-        }
-
-        if (line[strlen(line) - 1] == '\n') {
-            line[strlen(line) - 1] = '\0';
-        }
-
-        run(line);
-        printf("\n");
+    if (!fgets(line, MAX_LINE_LENGTH, stdin)) {
+      printf("\n"); 
+      break;
     }
+
+    if (line[strlen(line) - 1] == '\n') {
+      line[strlen(line) - 1] = '\0';
+    }
+
+    run(line);
+    printf("\n");
+  }
 }
 
 static void runFile(const char* path) {
-    printf("%s", path);
+  printf("%s", path);
 } 
 
 int main(int argc, const char* argv[]) {
-    if (argc == 1) {
-        printf("Welcome to boktraskare. cmd + d to exit.");
-        printf("\n");
-        printf("\n");
-        repl();
-    } else if (argc == 2) {
-        runFile(argv[2]);
-    } else {
-        fprintf(stderr, "Usage: traskare [path]\n");
-    }
+  if (argc == 1) {
+    printf("Welcome to boktraskare. cmd + d to exit.");
+    printf("\n");
+    printf("\n");
+    repl();
+  } else if (argc == 2) {
+    runFile(argv[2]);
+  } else {
+    fprintf(stderr, "Usage: traskare [path]\n");
+  }
 }

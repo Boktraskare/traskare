@@ -24,7 +24,7 @@ typedef enum {
     SC_LPR,
     SC_RPR,
     SC_EOF,
-    SC_ERR,
+    SC_UKN,
 } Syncat;
 
 typedef struct {

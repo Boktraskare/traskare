@@ -10,4 +10,4 @@
 #include "ast.h"
 
 void initParser();
-Node* parse();
+Ast parse();
