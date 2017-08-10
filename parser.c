@@ -9,6 +9,8 @@
    In the parser we look at the syntactic category of the
    current token and construct the appropriate value. See
    token.h for more info on the implementation of tokens.
+   
+   TODO: Enter panic mode after error occurs.
 
    ---------------------------------------------------------- */
 
