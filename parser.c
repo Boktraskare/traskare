@@ -42,7 +42,6 @@ static void setError();
 
 static Parser parser;
 
-
 void initParser() {
   parser.current  = scanToken();
   parser.previous = parser.current;
