@@ -9,6 +9,8 @@
    "Syntactic category" is abbreviated "syncat" throughout the
    code. And the SC_ prefix just indicates that the enum is a
    syntactic category.
+   
+   TODO: Make Syncat a string.
 
    ---------------------------------------------------------- */
 
