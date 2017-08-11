@@ -10,7 +10,8 @@
    code. And the SC_ prefix just indicates that the enum is a
    syntactic category.
    
-   TODO: Make Syncat a string.
+   TODO: Add a string representation of the syntactic category
+         to the token.
 
    ---------------------------------------------------------- */
 
