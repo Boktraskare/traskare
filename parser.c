@@ -112,7 +112,6 @@ static bool maa(Syncat syncat) {
     advance();
     return true;
   }
-   
   return false;
 }
 
