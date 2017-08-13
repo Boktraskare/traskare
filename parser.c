@@ -50,15 +50,15 @@ void initParser() {
 /*
 ** error is set whenever the parser can't parse something. This
 ** flag indicates to the caller of the parser that the returned
-** ast is not fit for execution and should be traversed and it's
-** errors reported to the user of the program.
+** ast is not fit for execution and should be traversed and
+** it's errors reported to the user of the program.
 */
 
-static bool errOccurred = false;
+static int err = 0;
 
 Ast parse() {
   Node* root = expression();
-  return (Ast) { .error = (errOccurred ? 1 : 0), .root = root };
+  return (Ast) { .error = err, .root = root };
 }
 
 static Node* expression() {
@@ -125,5 +125,5 @@ static void advance() {
 }
 
 static void setError() {
-  errOccurred = true;
+  err = 1;
 }

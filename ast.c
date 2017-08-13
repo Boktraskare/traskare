@@ -41,7 +41,8 @@ Value* ttov(Token t) {
     case SC_MUL: return consOpVal(OP_MUL); break;
     case SC_DIV: return consOpVal(OP_DIV); break;
     case SC_NUM:
-      return consNumVal(strtoll(t.lexeme.start, NULL, 10)); break;
+      return consNumVal(strtoll(t.lexeme.start, NULL, 10));
+      break;
           
       // TODO (Error handling): How to handle these?
     case SC_EOF:
