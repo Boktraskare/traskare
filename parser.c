@@ -11,6 +11,7 @@
    token.h for more info on the implementation of tokens.
    
    TODO: Enter panic mode after error occurs.
+   TODO: Merge this file and ast
 
    ---------------------------------------------------------- */
 
