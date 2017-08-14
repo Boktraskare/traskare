@@ -32,9 +32,13 @@ static int run(const char* source) {
   Ast ast = parse();
 
   /*
-  ** Check if the parser completed without errors, if it didn't we
-  ** report the errors to the user.
+  ** Check if the parser completed without errors, if it didn't
+  ** we report the errors to the user.
   */
+
+  #ifdef DEBUG_MODE
+  printAst(ast.root);
+  #endif
 
   if (ast.error){
     // reportErrors(ast);

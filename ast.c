@@ -8,6 +8,9 @@
    consNode() and tokenToValue() are the only functions needed
    to construct nodes for the AST. These functions are called
    by the parser.
+
+   TODO: Implement freeAst
+   TODO: Implement reportErrors
    
    ---------------------------------------------------------- */
 
@@ -53,10 +56,6 @@ Value* ttov(Token t) {
   return NULL; // TODO (Error handling): What to do here?
 }
 
-bool freeAst(Node* ast) {
-  return false;
-}
-
 static Value* consOpVal(Operator op) {
   Value* v = malloc(sizeof(Value));
 
@@ -81,4 +80,12 @@ static Value* consNumVal(long long val) {
   v->content.number = val;
 
   return v;
+}
+
+bool freeAst(Node* ast) {
+  return false;
+}
+
+void reportErrors(Ast ast) {
+  // Print errors to the user.
 }

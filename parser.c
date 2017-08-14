@@ -11,7 +11,7 @@
    token.h for more info on the implementation of tokens.
    
    TODO: Enter panic mode after error occurs.
-   TODO: Merge this file and ast
+   TODO: reportErrors()
 
    ---------------------------------------------------------- */
 
@@ -39,7 +39,7 @@ static Node* primary();
 static Node* expression();
 static Node* term();
 static bool maa(Syncat);
-static void setError();
+static Node* errNode();
 
 static Parser parser;
 
@@ -68,23 +68,19 @@ static Node* expression() {
 
 static Node* term() {   
   Node* ast = factor();
-    
   while (maa(SC_ADD) || maa(SC_SUB)) {
     Value* val = ttov(parser.previous);
     ast = consNode(ast, val, factor());        
   }
-
   return ast;
 }
 
 static Node* factor() {
   Node* ast = primary();
-
   while (maa(SC_MUL) || maa(SC_DIV)) {
     Value* val = ttov(parser.previous);
     ast = consNode(ast, val, primary());
   }
-
   return ast;
 }
 
@@ -96,15 +92,15 @@ static Node* primary() {
 
   if (maa(SC_LPR)) {
     Node* ast = expression();
-    if (!maa(SC_RPR)) {
-      setError();
-      return consErrorNode("Errror, expected left paren");
-    }
+    if (!maa(SC_RPR)) { return errNode("Errror, expected left paren"); }
     return ast;
   }
+  return errNode("Error parsing");
+}
 
-  setError();
-  return consErrorNode("Error parsing");
+static Node* errNode(const char* s) {
+  err = 1;
+  return consErrorNode(s);
 }
 
 // Match and Advance
@@ -123,8 +119,4 @@ static bool match(Syncat syncat) {
 static void advance() {
   parser.previous = parser.current;
   parser.current = scanToken();
-}
-
-static void setError() {
-  err = 1;
 }
