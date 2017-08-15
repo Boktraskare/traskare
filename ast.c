@@ -11,6 +11,7 @@
 
    TODO: Implement freeAst
    TODO: Implement reportErrors
+   TODO: Move eval stuff in here
    
    ---------------------------------------------------------- */
 
@@ -19,6 +20,7 @@
 #include <stdio.h>
 
 #include "ast.h"
+#include "token.h"
 
 static Value* consOpVal(Operator op);
 static Value* consNumVal(long long val);
@@ -31,9 +33,10 @@ Node* consNode(Node* lc, Value* v, Node* rc) {
   return n;
 }
 
-Node* consErrorNode(const char* s) {
+Node* consErrorNode(const char* s, Token t) {
   Node* n = malloc(sizeof(Node));
   n->err = s;
+  n->t = t;
   return n;
 }
 
@@ -46,8 +49,6 @@ Value* ttov(Token t) {
     case SC_NUM:
       return consNumVal(strtoll(t.lexeme.start, NULL, 10));
       break;
-          
-      // TODO (Error handling): How to handle these?
     case SC_EOF:
     case SC_UKN:
       return NULL;
@@ -82,10 +83,15 @@ static Value* consNumVal(long long val) {
   return v;
 }
 
-bool freeAst(Node* ast) {
-  return false;
+void reportErrors(Node* n) {
+  if (n == NULL) { return; };
+  if (n->err) {
+    printf("%s on %d:%d\n",n->err, n->t.lineNumber, n->t.col);
+  }
+  reportErrors(n->lc);
+  reportErrors(n->rc);
 }
 
-void reportErrors(Ast ast) {
-  // Print errors to the user.
+bool freeAst(Node* ast) {
+  return false;
 }

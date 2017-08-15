@@ -37,15 +37,17 @@ typedef struct {
   const char* lexeme;
   const char* current;
   int line;
+  int col;
 } Scanner;
 
 static Scanner scanner;
 
 void initScanner(const char* source) {
-  scanner.source      = source;
-  scanner.lexeme = source;
-  scanner.current     = source;
-  scanner.line        = 1;    
+  scanner.source  = source;
+  scanner.lexeme  = source;
+  scanner.current = source;
+  scanner.line    = 1;
+  scanner.col     = 0;
 }
 
 Token scanToken() {
@@ -83,6 +85,7 @@ static Token makeToken(Syncat syncat) {
   token.lexeme.start = scanner.lexeme;
   token.lexeme.length = (int) (scanner.current - scanner.lexeme);
   token.lineNumber = scanner.line;
+  token.col = scanner.col;
   return token;
 }
 
@@ -96,6 +99,7 @@ static void whitespace() {
         break;
       case '\n':
         scanner.line++;
+        scanner.col = 0;
         advance();
         break;
       default:
@@ -110,6 +114,7 @@ static bool isDigit(char c) {
 
 static char advance() {
   scanner.current++;
+  scanner.col++;
   return scanner.current[-1];
 }
 

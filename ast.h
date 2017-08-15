@@ -44,6 +44,7 @@ typedef struct {
 typedef struct Node Node;
 typedef struct Node {
   const char* err;
+  Token t;
   Value* value;
   Node*  lc;
   Node*  rc;
@@ -55,8 +56,9 @@ typedef struct {
 } Ast;
 
 Node* consNode(Node*, Value*, Node*);
-Node* consErrorNode(const char* s);
+Node* consErrorNode(const char*, Token);
 Value* ttov(Token);
 bool freeAst(Node*);
+void reportErrors(Node*);
 
 #endif

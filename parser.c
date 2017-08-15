@@ -11,7 +11,6 @@
    token.h for more info on the implementation of tokens.
    
    TODO: Enter panic mode after error occurs.
-   TODO: reportErrors()
 
    ---------------------------------------------------------- */
 
@@ -100,7 +99,7 @@ static Node* primary() {
 
 static Node* errNode(const char* s) {
   err = 1;
-  return consErrorNode(s);
+  return consErrorNode(s, parser.previous);
 }
 
 // Match and Advance

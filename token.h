@@ -11,7 +11,7 @@
    syntactic category.
    
    TODO: Add a string representation of the syntactic category
-         to the token.
+   to the token.
 
    ---------------------------------------------------------- */
 
@@ -19,26 +19,27 @@
 #define token_h
 
 typedef enum {
-    SC_NUM,
-    SC_ADD,
-    SC_SUB,
-    SC_MUL,
-    SC_DIV,
-    SC_LPR,
-    SC_RPR,
-    SC_EOF,
-    SC_UKN,
+  SC_NUM,
+  SC_ADD,
+  SC_SUB,
+  SC_MUL,
+  SC_DIV,
+  SC_LPR,
+  SC_RPR,
+  SC_EOF,
+  SC_UKN,
 } Syncat;
 
 typedef struct {
-    const char* start;
-    int length;
+  const char* start;
+  int length;
 } Lexeme;
 
 typedef struct {
-    Syncat syncat;
-    Lexeme lexeme;
-    int    lineNumber;
+  Syncat syncat;
+  Lexeme lexeme;
+  int    lineNumber;
+  int    col;
 } Token;
 
 #endif

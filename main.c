@@ -38,21 +38,18 @@ static int run(const char* source) {
 
   #ifdef DEBUG_MODE
   printAst(ast.root);
+  printf("\n");
   #endif
 
   if (ast.error){
-    // reportErrors(ast);
+    reportErrors(ast.root);
     return 1;
   } else {
-    // eval(ast);
+    printf("Result: %llu\n", eval(ast.root));
     return 0;
   }
 
-  //printAst(ast);
-  //printf("\n");
-  //printf("%llu", eval(ast));
-
-  // freeAst();
+  freeAst(ast.root);
 }
 
 static void repl() {
