@@ -28,7 +28,6 @@
 static int run(const char* source) {
   initScanner(source);
   initParser();
-
   Ast ast = parse();
 
   /*
