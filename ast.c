@@ -80,8 +80,21 @@ bool freeAst(Node* ast) {
   return false;
 }
 
+bool expr(Node* n) { return n->lc || n->rc; }
+
 void printAst(Node* n) {
+  if (!n) { return; }
+  if (expr(n)) {
+    printNodeParens(n);
+  } else {
+    printNode(n);
+  }
+}
+
+void printNodeParens(Node* n) {
+  printf("(");
   printNode(n);
+  printf(")");
 }
 
 void printNode(Node* n) {

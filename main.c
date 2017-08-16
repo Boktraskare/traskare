@@ -35,8 +35,8 @@ static int run(const char* source) {
   */
 
   #ifdef DEBUG_MODE
-  //printAst(ast.root);
-  //printf("\n");
+  printAst(ast.root);
+  printf("\n");
   #endif
 
   if (ast.error) {

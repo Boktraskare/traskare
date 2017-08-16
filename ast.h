@@ -62,8 +62,10 @@ bool freeAst(Node*);
 void reportErrors(Node*);
 void printAst(Node*);
 void printNode(Node*);
+void printNodeParens(Node*);
 void printValue(Value*);
 void printOp(Operator);
 void printNumber(long long);
+bool expr(Node*);
 
 #endif
