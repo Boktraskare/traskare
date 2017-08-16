@@ -78,9 +78,7 @@ static void runFile(const char* path) {
 
 int main(int argc, const char* argv[]) {
   if (argc == 1) {
-    printf("Welcome to boktraskare. cmd + d to exit.");
-    printf("\n");
-    printf("\n");
+    printf("Welcome to boktraskare. cmd + d to exit.\n\n");
     repl();
   } else if (argc == 2) {
     runFile(argv[2]);
