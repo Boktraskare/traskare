@@ -89,6 +89,7 @@ static Node* primary() {
     return consNode(NULL, val, NULL);
   }
 
+  // Check this it's probably wrong
   if (maa(SC_LPR)) {
     Node* ast = expression();
     if (!maa(SC_RPR)) { return errNode("Errror, expected left paren"); }
