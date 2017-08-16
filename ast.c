@@ -9,10 +9,6 @@
    to construct nodes for the AST. These functions are called
    by the parser.
 
-   TODO: Implement freeAst
-   TODO: Implement reportErrors
-   TODO: Move eval stuff in here
-   
    ---------------------------------------------------------- */
 
 #include <stdlib.h>
@@ -59,39 +55,69 @@ Value* ttov(Token t) {
 
 static Value* consOpVal(Operator op) {
   Value* v = malloc(sizeof(Value));
-
-  if (!v) {
-    return NULL;
-  }
-
+  if (!v) { return NULL; }
   v->type = OPERATOR;
   v->content.op = op;
-
   return v;
 }
 
 static Value* consNumVal(long long val) {
   Value* v = malloc(sizeof(Value));
-
-  if (!v) {
-    return NULL;
-  }
-
+  if (!v) { return NULL; }
   v->type = NUMBER;
   v->content.number = val;
-
   return v;
 }
 
 void reportErrors(Node* n) {
   if (n == NULL) { return; };
-  if (n->err) {
-    printf("%s on %d:%d\n",n->err, n->t.lineNumber, n->t.col);
-  }
+  if (n->err) {printf("%s on %d:%d\n",n->err, n->t.lineNumber, n->t.col);}
   reportErrors(n->lc);
   reportErrors(n->rc);
 }
 
 bool freeAst(Node* ast) {
   return false;
+}
+
+void printAst(Node* n) {
+  printNode(n);
+}
+
+void printNode(Node* n) {
+  printValue(n->value);
+  printAst(n->lc);
+  printAst(n->rc);
+}
+
+void printValue(Value* v) {
+  switch (v->type) {
+    case OPERATOR:
+      printOp(v->content.op);
+      break;
+    case NUMBER:
+      printNumber(v->content.number);
+      break;
+  }
+}
+
+void printOp(Operator op) {
+  switch (op) {
+    case OP_ADD:
+      putchar('+');
+      break;
+    case OP_SUB:
+      putchar('-');
+      break;
+    case OP_MUL:
+      putchar('*');
+      break;
+    case OP_DIV:
+      putchar('/');
+      break;
+  }
+}
+
+void printNumber(long long n) {
+  printf("%llu", n);
 }

@@ -18,8 +18,6 @@
 #include "eval.h"
 #include "ast.h"
 
-#include "printing.h"
-
 static long long binary(Node*);
 
 long long eval(Node* ast) {

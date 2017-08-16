@@ -20,7 +20,6 @@
 #include "token.h"
 #include "parser.h"
 #include "ast.h"
-#include "printing.h"
 #include "eval.h"
 
 #define MAX_LINE_LENGTH 1024
@@ -36,11 +35,11 @@ static int run(const char* source) {
   */
 
   #ifdef DEBUG_MODE
-  printAst(ast.root);
-  printf("\n");
+  //printAst(ast.root);
+  //printf("\n");
   #endif
 
-  if (ast.error){
+  if (ast.error) {
     reportErrors(ast.root);
     return 1;
   } else {
@@ -48,7 +47,7 @@ static int run(const char* source) {
     return 0;
   }
 
-  freeAst(ast.root);
+  //freeAst(ast.root);
 }
 
 static void repl() {
