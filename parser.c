@@ -27,6 +27,7 @@ static Node* term();
 static Node* factor();
 static bool match();
 static void advance();
+static bool maa(Syncat);
 
 typedef struct {
   Token current; // Lookahead LL(1)
@@ -37,7 +38,6 @@ typedef struct {
 static Node* primary();
 static Node* expression();
 static Node* term();
-static bool maa(Syncat);
 static Node* errNode();
 
 static Parser parser;
