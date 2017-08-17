@@ -76,61 +76,55 @@ void reportErrors(Node* n) {
   reportErrors(n->rc);
 }
 
-bool freeAst(Node* ast) {
+bool freeAst(Node* n) {
   return false;
 }
 
 bool expr(Node* n) { return n->lc || n->rc; }
 
 void printAst(Node* n) {
-  if (!n) { return; }
-  if (expr(n)) {
-    printNodeParens(n);
-  } else {
-    printNode(n);
-  }
+  printNodeParens(n);
 }
 
 void printNodeParens(Node* n) {
   printf("(");
-  printNode(n);
+  printValue(n->value);
+  putchar(' ');
+  printNode(n->lc);
+  putchar(' ');
+  printNode(n->rc);
   printf(")");
 }
 
 void printNode(Node* n) {
-  printValue(n->value);
-  printAst(n->lc);
-  printAst(n->rc);
+  if (!n) { return; };
+  // This is a temporary fix to not crash the program when printing a tree
+  // containing parsing errors. The crash is caused by the parser not giving
+  // values to error nodes which results in null pointer dereference here.
+  // TODO: Fix it in the parser.
+  if (!n->value) { printf("err"); return; };
+  switch (n->value->type) {
+    case OPERATOR: printNodeParens(n); break;
+    case NUMBER: printValue(n->value); break;
+  }
 }
 
 void printValue(Value* v) {
   switch (v->type) {
-    case OPERATOR:
-      printOp(v->content.op);
-      break;
-    case NUMBER:
-      printNumber(v->content.number);
-      break;
+    case OPERATOR: printOp(v); break;
+    case NUMBER: printNum(v); break;
   }
 }
 
-void printOp(Operator op) {
-  switch (op) {
-    case OP_ADD:
-      putchar('+');
-      break;
-    case OP_SUB:
-      putchar('-');
-      break;
-    case OP_MUL:
-      putchar('*');
-      break;
-    case OP_DIV:
-      putchar('/');
-      break;
+void printOp(Value* v) {
+  switch(v->content.op) {
+    case OP_ADD: putchar('+'); break;
+    case OP_SUB: putchar('-'); break;
+    case OP_MUL: putchar('*'); break;
+    case OP_DIV: putchar('/'); break;
   }
 }
 
-void printNumber(long long n) {
-  printf("%llu", n);
+void printNum(Value* v) {
+  printf("%llu", v->content.number);
 }

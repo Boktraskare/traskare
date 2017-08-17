@@ -61,11 +61,10 @@ Value* ttov(Token);
 bool freeAst(Node*);
 void reportErrors(Node*);
 void printAst(Node*);
-void printNode(Node*);
 void printNodeParens(Node*);
+void printNode(Node*);
 void printValue(Value*);
-void printOp(Operator);
-void printNumber(long long);
-bool expr(Node*);
+void printOp(Value*);
+void printNum(Value*);
 
 #endif
