@@ -70,7 +70,7 @@ static Value* consNumVal(long long val) {
 }
 
 void reportErrors(Node* n) {
-  if (n == NULL) { return; };
+  if (!n) { return; };
   if (n->err) {printf("%s on %d:%d\n",n->err, n->t.lineNumber, n->t.col);}
   reportErrors(n->lc);
   reportErrors(n->rc);
