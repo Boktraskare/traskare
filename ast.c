@@ -22,7 +22,7 @@ static Value* consOpVal(Operator op);
 static Value* consNumVal(long long val);
 
 Node* consNode(Node* lc, Value* v, Node* rc) {
-  Node* n = malloc(sizeof(Node));
+  Node* n  = malloc(sizeof(Node));
   n->value = v;
   n->lc    = lc;
   n->rc    = rc;
