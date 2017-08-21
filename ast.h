@@ -38,7 +38,7 @@ typedef struct {
   union {
     Operator  op;
     long long number;
-  } content;
+  };
 } Value;
 
 typedef struct Node Node;

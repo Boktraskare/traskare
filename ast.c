@@ -57,7 +57,7 @@ static Value* consOpVal(Operator op) {
   Value* v = malloc(sizeof(Value));
   if (!v) { return NULL; }
   v->type = OPERATOR;
-  v->content.op = op;
+  v->op = op;
   return v;
 }
 
@@ -65,7 +65,7 @@ static Value* consNumVal(long long val) {
   Value* v = malloc(sizeof(Value));
   if (!v) { return NULL; }
   v->type = NUMBER;
-  v->content.number = val;
+  v->number = val;
   return v;
 }
 
@@ -117,7 +117,7 @@ void printValue(Value* v) {
 }
 
 void printOp(Value* v) {
-  switch(v->content.op) {
+  switch(v->op) {
     case OP_ADD: putchar('+'); break;
     case OP_SUB: putchar('-'); break;
     case OP_MUL: putchar('*'); break;
@@ -126,5 +126,5 @@ void printOp(Value* v) {
 }
 
 void printNum(Value* v) {
-  printf("%llu", v->content.number);
+  printf("%llu", v->number);
 }

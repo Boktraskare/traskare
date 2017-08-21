@@ -1,6 +1,6 @@
 # Makefile for boktraskare
 
-CFLAGS := -std=c99 -Wall -Wextra -Werror -Wno-unused-variable -Wno-unused-function -Wno-unused-parameter -Wno-switch -DDEBUG_MODE -g
+CFLAGS := -std=c11 -Wall -Wextra -Werror -Wno-unused-variable -Wno-unused-function -Wno-unused-parameter -Wno-switch -DDEBUG_MODE -g
 
 SOURCES := $(wildcard *.c)
 OBJECTS := $(addprefix build/, $(notdir $(SOURCES:.c=.o)))
