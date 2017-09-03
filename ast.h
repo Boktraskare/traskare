@@ -31,6 +31,7 @@ typedef enum {
 typedef enum {
   OPERATOR,
   NUMBER,
+  ERROR,
 } ValueType;
 
 typedef struct {
@@ -66,5 +67,6 @@ void printNode(Node*);
 void printValue(Value*);
 void printOp(Value*);
 void printNum(Value*);
+void printErrorNode(Node*);
 
 #endif

@@ -50,8 +50,8 @@ void initParser() {
 /*
 ** error is set whenever the parser can't parse something. This
 ** flag indicates to the caller of the parser that the returned
-** ast is not fit for execution and should be traversed and
-** it's errors reported to the user of the program.
+** ast is not fit for evaluation and should be traversed and it's
+** errors reported to the user of the program.
 */
 
 static int err = 0;
@@ -89,7 +89,6 @@ static Node* primary() {
     return consNode(NULL, val, NULL);
   }
 
-  // Check this it's probably wrong
   if (maa(SC_LPR)) {
     Node* ast = expression();
     if (!maa(SC_RPR)) { return errNode("Errror, expected left paren"); }

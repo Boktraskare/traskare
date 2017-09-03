@@ -26,6 +26,7 @@ long long eval(Node* ast) {
         case NUMBER: return ast->value->number; break;
     }
 
+    printf("Error in evaluation");
     return -1337; // TODO (error handling)
 }
 

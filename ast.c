@@ -22,15 +22,17 @@ static Value* consOpVal(Operator op);
 static Value* consNumVal(long long val);
 
 Node* consNode(Node* lc, Value* v, Node* rc) {
-  Node* n  = malloc(sizeof(Node));
+  Node* n = malloc(sizeof(Node));
   n->value = v;
-  n->lc    = lc;
-  n->rc    = rc;
+  n->lc = lc;
+  n->rc = rc;
   return n;
 }
 
 Node* consErrorNode(const char* s, Token t) {
-  Node* n = malloc(sizeof(Node));
+  Value* v = malloc(sizeof(Value));
+  v->type = ERROR;
+  Node* n = consNode(NULL, v, NULL);
   n->err = s;
   n->t = t;
   return n;
@@ -71,7 +73,7 @@ static Value* consNumVal(long long val) {
 
 void reportErrors(Node* n) {
   if (!n) { return; };
-  if (n->err) {printf("%s on %d:%d\n",n->err, n->t.lineNumber, n->t.col);}
+  if (n->err) { printf("%s on %d:%d\n",n->err, n->t.lineNumber, n->t.col); }
   reportErrors(n->lc);
   reportErrors(n->rc);
 }
@@ -98,14 +100,10 @@ void printNodeParens(Node* n) {
 
 void printNode(Node* n) {
   if (!n) { return; };
-  // This is a temporary fix to not crash the program when printing a tree
-  // containing parsing errors. The crash is caused by the parser not giving
-  // values to error nodes which results in null pointer dereference here.
-  // TODO: Fix it in the parser.
-  if (!n->value) { printf("err"); return; };
   switch (n->value->type) {
     case OPERATOR: printNodeParens(n); break;
     case NUMBER: printValue(n->value); break;
+    case ERROR: printErrorNode(n); break;
   }
 }
 
@@ -127,4 +125,8 @@ void printOp(Value* v) {
 
 void printNum(Value* v) {
   printf("%llu", v->number);
+}
+
+void printErrorNode(Node* n) {
+  printf("%s", n->err);
 }
