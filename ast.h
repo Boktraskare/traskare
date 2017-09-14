@@ -59,7 +59,7 @@ typedef struct {
 Node* consNode(Node*, Value*, Node*);
 Node* consErrorNode(const char*, Token);
 Value* ttov(Token);
-bool freeAst(Node*);
+void freeAst(Node*);
 void reportErrors(Node*);
 void printAst(Node*);
 void printNodeParens(Node*);

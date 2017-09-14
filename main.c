@@ -47,7 +47,8 @@ static int run(const char* source) {
     return 0;
   }
 
-  //freeAst(ast.root);
+  // Make sure this works. Check for memory leaks with valgrind.
+  freeAst(ast.root);
 }
 
 static void repl() {

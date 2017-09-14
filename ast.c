@@ -18,8 +18,9 @@
 #include "ast.h"
 #include "token.h"
 
-static Value* consOpVal(Operator op);
-static Value* consNumVal(long long val);
+static Value* consOpVal(Operator);
+static Value* consNumVal(long long);
+static bool expr(Node*);
 
 Node* consNode(Node* lc, Value* v, Node* rc) {
   Node* n = malloc(sizeof(Node));
@@ -73,20 +74,20 @@ static Value* consNumVal(long long val) {
 
 void reportErrors(Node* n) {
   if (!n) { return; };
-  if (n->err) { printf("%s on %d:%d\n",n->err, n->t.lineNumber, n->t.col); }
+  if (n->err) { printf("%s on %d:%d\n", n->err, n->t.lineNumber, n->t.col); }
   reportErrors(n->lc);
   reportErrors(n->rc);
 }
 
-bool freeAst(Node* n) {
-  return false;
+void freeAst(Node* n) {
+  if (n->lc != NULL) { freeAst(n->lc); };
+  if (n->rc != NULL) { freeAst(n->rc); };
+  free(n);
 }
 
 bool expr(Node* n) { return n->lc || n->rc; }
 
-void printAst(Node* n) {
-  printNodeParens(n);
-}
+void printAst(Node* n) { printNodeParens(n); }
 
 void printNodeParens(Node* n) {
   printf("(");
