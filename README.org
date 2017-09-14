@@ -1,2 +1,25 @@
-* Boktraskare
-  A tree walking interpreter in C.
+This is a description of the traskare code. This is written for my own learning
+purposes and might be (probably is) incorrect on many parts of the theory of
+compilers and interpreters.
+
+* Traskare
+** Scanner
+** Parser
+*** Overview
+The parser is a standard recursive descent parser.
+
+*** Input
+The input to the parser is obscured by the fact that tokens are scanned as the
+parser asks for them. initParser() will prime the parser by scanning the source
+and load the first token. After the first token is scanned, a call to parse() will
+kick off the whole scanning process, during which the parser requests tokens from
+the scanner continuously. The scanner will scan the source and produce tokens "on
+demand", but this is transparent to the parser.
+
+*** Output
+In case the parsing was succesful the output is an abstract syntax tree. If an
+error flag was set during parsing, the produced tree is not fit for evaluation.
+This difference is communicated with the error boolean in the returned structure.
+
+In case the error boolean is set, the tree will itself contain nodes wrapping the
+errors produced during parsing. To report these errors a simple traversal will do.

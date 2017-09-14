@@ -6,9 +6,10 @@
    parser will consume at will, a token at a time. The output
    is the abstract syntax tree (AST).
 
-   In the parser we look at the syntactic category of the
-   current token and construct the appropriate value. See
-   token.h for more info on the implementation of tokens.
+   In the parser we look at the syntactic category (abbreviated
+   "SC" in the code) of the current token and construct the
+   appropriate value. See token.h for more info on the
+   implementation of tokens.
    
    TODO: Enter panic mode after error occurs.
 
@@ -67,23 +68,28 @@ static Node* expression() {
 
 static Node* term() {   
   Node* ast = factor();
+
   while (maa(SC_ADD) || maa(SC_SUB)) {
     Value* val = ttov(parser.previous);
     ast = consNode(ast, val, factor());        
   }
+
   return ast;
 }
 
 static Node* factor() {
   Node* ast = primary();
+
   while (maa(SC_MUL) || maa(SC_DIV)) {
     Value* val = ttov(parser.previous);
     ast = consNode(ast, val, primary());
   }
+
   return ast;
 }
 
 static Node* primary() {
+
   if (maa(SC_NUM)) {
     Value* val = ttov(parser.previous);
     return consNode(NULL, val, NULL);
@@ -94,12 +100,13 @@ static Node* primary() {
     if (!maa(SC_RPR)) { return errNode("Errror, expected left paren"); }
     return ast;
   }
+
   return errNode("Error parsing");
 }
 
 static Node* errNode(const char* s) {
   err = 1;
-  return consErrorNode(s, parser.previous);
+  return consErrorNode(s, parser.previous); // Ugly
 }
 
 // Match and Advance
